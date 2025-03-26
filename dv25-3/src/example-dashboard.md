@@ -10,6 +10,7 @@ toc: false
 
 ```js
 const launches = FileAttachment("data/launches.csv").csv({typed: true});
+const data = await FileAttachment("data/radar_chart.csv").csv({typed: true});
 ```
 
 <!-- A shared color scale for consistency, sorted by the number of launches -->
@@ -97,3 +98,114 @@ function vehicleChart(data, {width}) {
 </div>
 
 Data: Jonathan C. McDowell, [General Catalog of Artificial Space Objects](https://planet4589.org/space/gcat)
+
+```js
+function radar_chart(data, {width, height} = {}) {
+  const points = data.flatMap(({ Age, ...values }) => Object.entries(values).map(([key, value]) => ({ Age, key, value })))
+  const longitude = d3.scalePoint(new Set(Plot.valueof(points, "key")), [180, -180]).padding(0.5).align(1)
+
+  return Plot.plot({
+      width:700,
+      height:700,
+      marginTop: 30,
+      projection: {
+      type: "azimuthal-equidistant",
+      rotate: [0, -90],
+      domain: d3.geoCircle().center([0, 90]).radius(0.8)()
+      },
+      color: { legend: true },
+      marks: [
+      // grey discs
+      Plot.geo([0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1], {
+          geometry: (r) => d3.geoCircle().center([0, 90]).radius(r)(),
+          stroke: "white",
+          fill: "white",
+          strokeOpacity: 0.3,
+          fillOpacity: 0.03,
+          strokeWidth: 0.5
+      }),
+  
+      // white axes
+      Plot.link(longitude.domain(), {
+          x1: longitude,
+          y1: 90 - 0.73,
+          x2: 0,
+          y2: 90,
+          stroke: "white",
+          strokeOpacity: 0.5,
+          strokeWidth: 3.5
+      }),
+  
+      // percentage labels
+      Plot.text([0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7], {
+          x: 180,
+          y: (d) => 90 - d,
+          dx: 2,
+          textAnchor: "start",
+          text: (d) => `${100 * d}%`,
+          fill: "black",
+          stroke: "white",
+          fontSize: 12
+      }),
+  
+      // axes labels
+      Plot.text(longitude.domain(), {
+          x: longitude,
+          y: 90 - 0.79,
+          text: Plot.identity,
+          lineWidth: 5,
+          fontSize: 16
+      }),
+  
+      // areas
+      Plot.area(points, {
+          x1: ({ key }) => longitude(key),
+          y1: ({ value }) => 90 - value,
+          x2: 0,
+          y2: 90,
+          fill: "Age",
+          stroke: "Age",
+          curve: "cardinal-closed"
+      }),
+  
+      // points
+      Plot.dot(points, {
+          x: ({ key }) => longitude(key),
+          y: ({ value }) => 90 - value,
+          fill: "Age",
+          stroke: "white"
+      }),
+  
+      // interactive labels
+      Plot.text(
+          points,
+          Plot.pointer({
+          x: ({ key }) => longitude(key),
+          y: ({ value }) => 90 - value,
+          text: (d) => `${(100 * d.value).toFixed(0)}%`,
+          textAnchor: "start",
+          dx: 4,
+          fill: "black",
+          stroke: "white",
+          maxRadius: 10
+          })
+      ),
+  
+      // interactive opacity on the areas
+      () =>
+          svg`<style>
+              g[aria-label=area] path {fill-opacity: 0.1; transition: fill-opacity .2s;}
+              g[aria-label=area]:hover path:not(:hover) {fill-opacity: 0.05; transition: fill-opacity .2s;}
+              g[aria-label=area] path:hover {fill-opacity: 0.3; transition: fill-opacity .2s;}
+          `
+      ]
+  });
+}
+```
+
+<div class="grid grid-cols-1">
+  <div class="card">
+    ${resize((width) => radar_chart(data, {width}))}
+  </div>
+</div>
+
