@@ -30,7 +30,7 @@ function radar_chart(data, {width, height} = {}) {
   const longitude = d3.scalePoint(new Set(Plot.valueof(points, "key")), [180, -180]).padding(0.5).align(1)
 
   return Plot.plot({
-      width:700,
+      width:950,
       height:700,
       marginTop: 30,
       projection: {
@@ -135,31 +135,56 @@ function radar_chart(data, {width, height} = {}) {
   </div>
 </div>
 
-## Trust in scientific development with the use of AI, by education level
+## Trust in scientific development with the use of AI
 
-Uitleg
+Uitleg: vooral over de data
 
 ```js
-const waffle_data = d3.csvParse(`group,freq
-Don't know,1064
-Totally disagree,3223
-Neither agree nor disagree,7899
-Tend to agree,11009
-Totally agree,2316`)
+const waffle_data1 = d3.csvParse(`group,freq
+Don't know,548
+Totally disagree,319
+Tend to disagree,1076
+Neither agree nor disagree,2485
+Tend to agree,2884
+Totally agree,508`)
 
-function waffle(w_data, {width, height} = {}) {
-  const units = w_data.flatMap(d => d3.range(Math.round((d.freq / 25446) * 100)).map(() => d));
-  const groupDomain = [...new Set(units.map(d => d.group))];
+const waffle_data2 = d3.csvParse(`group,freq
+Don't know,116
+Totally disagree,74
+Tend to disagree,285
+Neither agree nor disagree,719
+Tend to agree,1048
+Totally agree,197`)
+
+const waffle_data3 = d3.csvParse(`group,freq
+Don't know,80
+Totally disagree,132
+Tend to disagree,485
+Neither agree nor disagree,1207
+Tend to agree,2058
+Totally agree,604`)
+
+const groupDomain = [
+  "Don't know",
+  "Totally disagree",
+  "Tend to disagree",
+  "Neither agree nor disagree",
+  "Tend to agree",
+  "Totally agree"
+];
+const colorRange = ["#888888", ...d3.schemeRdYlGn[groupDomain.length - 1]];
+
+function waffle(w_data, total, {width, height} = {}) {
+  const units = w_data.flatMap(d => d3.range(Math.round((d.freq / total) * 100)).map(() => d));
   
   return Plot.plot({
     marks: [
       Plot.cell(
         units,
         Plot.stackX({
-          //x: (_, i) => Math.floor(i / rows),
           y: (_, i) => i % 10,
           fill: "group",
-          title: (iets, _) => Math.round((iets.freq / 25446) * 100) + "%"
+          title: (iets, _) => Math.round((iets.freq / total) * 100) + "%"
         })
       ),
       Plot.text(
@@ -179,22 +204,53 @@ function waffle(w_data, {width, height} = {}) {
     x: { axis: null },
     y: { axis: null , reverse: true},
     color: {
-      legend: true,
       type: "ordinal",
       domain: groupDomain,
-      range: ["#888888", ...d3.schemeRdYlGn[groupDomain.length - 1].slice()]
+      range: colorRange
     }
   });
 }
 ```
 
-<div class="grid grid-cols-1">
-  <div class="card">
-    ${resize((width) => waffle(waffle_data, {width}))}
+<div class="grid-3">
+  <div class="grid-item">
+    <div class="waffle-title">Primary maximum</div>
+    <div class="waffle-chart">${waffle(waffle_data1, 7828, { width: 300, height: 300 })}</div>
+  </div>
+  <div class="grid-item">
+    <div class="waffle-title">Secondary maximum</div>
+    <div class="waffle-chart">${waffle(waffle_data2, 2439, { width: 300, height: 300 })}</div>
+  </div>
+  <div class="grid-item">
+    <div class="waffle-title">One or two higher education</div>
+    <div class="waffle-chart">${waffle(waffle_data3, 4566, { width: 300, height: 300 })}</div>
+  </div>
+</div>
+
+<div class="grid">
+  <div class="mt-4">
+    ${Plot.legend({
+      color: {
+        type: "ordinal",
+        domain: groupDomain,
+        range: colorRange
+      },
+      columns: 6
+    })}
   </div>
 </div>
 
 <style>
+
+.waffle-chart {
+  width: 550px;
+  text-align: center;
+}
+
+.waffle-title {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
 
 .hero {
   display: flex;
@@ -235,4 +291,20 @@ function waffle(w_data, {width, height} = {}) {
   }
 }
 
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  justify-items: center;
+  align-items: start;
+  margin-top: 2rem;
+}
+
+.grid-item {
+  text-align: center;
+  width: 300px;
+}
+
 </style>
+
+Vervolg van de uitleg: wat we kunnen zien en afleiden uit de mooie visualisatie
