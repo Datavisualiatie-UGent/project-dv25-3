@@ -3,26 +3,6 @@ title: Introduction
 toc: false
 ---
 
-<div class="hero">
-  <h1>Datavisualisatie project</h1>
-  <h2>Welcome to your new app! Edit&nbsp;<code style="font-size: 90%;">src/index.md</code> to change this page.</h2>
-</div>
-hier komt de how well informed voor elk van de 6 categorieën
-<div class="card">${
-  resize((width) => Plot.plot({
-    title: "How big are penguins, anyway? 🐧",
-    width,
-    grid: true,
-    x: {label: "Body mass (g)"},
-    y: {label: "Flipper length (mm)"},
-    color: {legend: true},
-    marks: [
-      Plot.linearRegressionY(penguins, {x: "body_mass_g", y: "flipper_length_mm", stroke: "species"}),
-      Plot.dot(penguins, {x: "body_mass_g", y: "flipper_length_mm", stroke: "species", tip: true})
-    ]
-  }))
-}</div>
-
 ```js
 const data = await FileAttachment("data/radar_chart.csv").csv({typed: true});
 function radar_chart(data, {width, height} = {}) {
@@ -30,7 +10,7 @@ function radar_chart(data, {width, height} = {}) {
   const longitude = d3.scalePoint(new Set(Plot.valueof(points, "key")), [180, -180]).padding(0.5).align(1)
 
   return Plot.plot({
-      width:950,
+      width:1060,
       height:700,
       marginTop: 30,
       projection: {
@@ -127,17 +107,6 @@ function radar_chart(data, {width, height} = {}) {
   });
 }
 ```
-## What are the main 2 sources used to gather information by age
-
-<div class="grid grid-cols-1">
-  <div class="card">
-    ${resize((width) => radar_chart(data, {width}))}
-  </div>
-</div>
-
-## Trust in scientific development with the use of AI
-
-Uitleg: vooral over de data
 
 ```js
 const waffle_data1 = d3.csvParse(`group,freq
@@ -211,6 +180,40 @@ function waffle(w_data, total, {width, height} = {}) {
   });
 }
 ```
+<div class="hero">
+  <h1>Datavisualisatie project</h1>
+  <h2>Welcome to your new app! Edit&nbsp;<code style="font-size: 90%;">src/index.md</code> to change this page.</h2>
+</div>
+hier komt de how well informed voor elk van de 6 categorieën
+<div class="card">${
+  resize((width) => Plot.plot({
+    title: "How big are penguins, anyway?",
+    width,
+    grid: true,
+    x: {label: "Body mass (g)"},
+    y: {label: "Flipper length (mm)"},
+    color: {legend: true},
+    marks: [
+      Plot.linearRegressionY(penguins, {x: "body_mass_g", y: "flipper_length_mm", stroke: "species"}),
+      Plot.dot(penguins, {x: "body_mass_g", y: "flipper_length_mm", stroke: "species", tip: true})
+    ]
+  }))
+}</div>
+
+
+## What are the main 2 sources used to gather information by age?
+
+Uitleg ervoor
+
+<div class="grid grid-cols-1">
+    ${resize((width) => radar_chart(data, {width}))}
+</div>
+
+Uitleg erna
+
+## Trust in scientific development with the use of AI
+
+Uitleg: vooral over de data
 
 <div class="grid-3">
   <div class="grid-item">
@@ -226,7 +229,6 @@ function waffle(w_data, total, {width, height} = {}) {
     <div class="waffle-chart">${waffle(waffle_data3, 4566, { width: 300, height: 300 })}</div>
   </div>
 </div>
-
 <div class="grid">
   <div class="mt-4">
     ${Plot.legend({
@@ -240,8 +242,10 @@ function waffle(w_data, total, {width, height} = {}) {
   </div>
 </div>
 
-<style>
+Vervolg van de uitleg: wat we kunnen zien en afleiden uit de mooie visualisatie
 
+
+<style>
 .waffle-chart {
   width: 550px;
   text-align: center;
@@ -304,7 +308,4 @@ function waffle(w_data, total, {width, height} = {}) {
   text-align: center;
   width: 300px;
 }
-
 </style>
-
-Vervolg van de uitleg: wat we kunnen zien en afleiden uit de mooie visualisatie
