@@ -5,6 +5,12 @@ toc: false
 
 ```js
 const data = await FileAttachment("data/radar_chart.csv").csv({typed: true});
+const ageDomain = [
+  "Age: 15-24",
+  "Age: 35-44",
+  "Age: 55-64",
+];
+const usedColors = ["#4269d0","#efb118","#ff725c","#6cc5b0","#3ca951","#ff8ab7","#a463f2","#97bbf5","#9c6b4e","#9498a0"];
 function radar_chart(data, {width, height} = {}) {
   const points = data.flatMap(({ Age, ...values }) => Object.entries(values).map(([key, value]) => ({ Age, key, value })))
   const longitude = d3.scalePoint(new Set(Plot.valueof(points, "key")), [180, -180]).padding(0.5).align(1)
@@ -18,7 +24,10 @@ function radar_chart(data, {width, height} = {}) {
       rotate: [0, -90],
       domain: d3.geoCircle().center([0, 90]).radius(0.8)()
       },
-      color: { legend: true },
+      color: {
+        type: "ordinal",
+        range: usedColors
+       },
       marks: [
       // grey discs
       Plot.geo([0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1], {
@@ -184,9 +193,13 @@ function waffle(w_data, total, {width, height} = {}) {
   <h1>European citizens: knowledge and attitudes towards science and technology</h1>
 </div>
 
+Introduction about the survey and the dataset
+<br>
+<br>
+
 ## How well is the European citizen informed?
 
-<br>Hier komt de how 'well informed voor elk van de 6 categorieën'-graph
+<br>Hier komt de stacked bar chart
 
 <div class="card">${
   resize((width) => Plot.plot({
@@ -202,17 +215,36 @@ function waffle(w_data, total, {width, height} = {}) {
     ]
   }))
 }</div>
-
+<br>
+<br>
 
 ## What are the main 2 sources used to gather information by age?
 
 <br>Uitleg ervoor
 
-<div class="grid grid-cols-1">
-    ${resize((width) => radar_chart(data, {width}))}
+<div class="card">
+  <div class="waffle-title">Main sources used to stay up to date</div>
+  <div class="grid">
+    <div class="mt-4">
+      ${Plot.legend({
+        color: {
+          type: "ordinal",
+          domain: ageDomain,
+          range: usedColors
+        },
+        columns: 6,
+        style: {
+          fontSize: "14px"
+        }
+      })}
+    </div>
+  </div>
+  <div class="grid grid-cols-1">
+      ${resize((width) => radar_chart(data, {width}))}
+  </div>
+  <div class="waffle-title"> </div>
 </div>
 
-<br>
 Uitleg erna
 <br>
 <br>
@@ -244,7 +276,11 @@ Uitleg erna
         domain: groupDomain,
         range: colorRange
       },
-      columns: 6
+      columns: 6,
+      style: {
+          fontSize: "14px",
+          spacing: "0.5rem"
+        }
     })}
   </div>
 </div>
