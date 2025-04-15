@@ -181,10 +181,13 @@ function waffle(w_data, total, {width, height} = {}) {
 }
 ```
 <div class="hero">
-  <h1>Datavisualisatie project</h1>
-  <h2>Welcome to your new app! Edit&nbsp;<code style="font-size: 90%;">src/index.md</code> to change this page.</h2>
+  <h1>European citizens: knowledge and attitudes towards science and technology</h1>
 </div>
-hier komt de how well informed voor elk van de 6 categorieën
+
+## How well is the European citizen informed?
+
+<br>Hier komt de how 'well informed voor elk van de 6 categorieën'-graph
+
 <div class="card">${
   resize((width) => Plot.plot({
     title: "How big are penguins, anyway?",
@@ -203,17 +206,21 @@ hier komt de how well informed voor elk van de 6 categorieën
 
 ## What are the main 2 sources used to gather information by age?
 
-Uitleg ervoor
+<br>Uitleg ervoor
 
 <div class="grid grid-cols-1">
     ${resize((width) => radar_chart(data, {width}))}
 </div>
 
+<br>
 Uitleg erna
+<br>
+<br>
+<br>
 
 ## Trust in scientific development with the use of AI
 
-Uitleg: vooral over de data
+<br>Uitleg: vooral over de data
 
 <div class="grid-3">
   <div class="grid-item">
@@ -261,17 +268,16 @@ Vervolg van de uitleg: wat we kunnen zien en afleiden uit de mooie visualisatie
   flex-direction: column;
   align-items: center;
   font-family: var(--sans-serif);
-  margin: 4rem 0 8rem;
+  margin: 1rem 0 3rem;
   text-wrap: balance;
   text-align: center;
 }
 
 .hero h1 {
-  margin: 1rem 0;
-  padding: 1rem 0;
+  padding: 0.5rem 0;
   max-width: none;
   font-size: 14vw;
-  font-weight: 900;
+  font-weight: 700;
   line-height: 1;
   background: linear-gradient(30deg, var(--theme-foreground-focus), currentColor);
   -webkit-background-clip: text;
@@ -279,19 +285,9 @@ Vervolg van de uitleg: wat we kunnen zien en afleiden uit de mooie visualisatie
   background-clip: text;
 }
 
-.hero h2 {
-  margin: 0;
-  max-width: 34em;
-  font-size: 20px;
-  font-style: initial;
-  font-weight: 500;
-  line-height: 1.5;
-  color: var(--theme-foreground-muted);
-}
-
 @media (min-width: 640px) {
   .hero h1 {
-    font-size: 90px;
+    font-size: 70px;
   }
 }
 
@@ -307,5 +303,9 @@ Vervolg van de uitleg: wat we kunnen zien en afleiden uit de mooie visualisatie
 .grid-item {
   text-align: center;
   width: 300px;
+}
+
+h2 {
+  display: inline;
 }
 </style>
