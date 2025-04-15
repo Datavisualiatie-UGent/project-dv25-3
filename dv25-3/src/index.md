@@ -137,7 +137,62 @@ function radar_chart(data, {width, height} = {}) {
 
 ## Trust in scientific development with the use of AI, by education level
 
-Hier komt waffle chart
+Uitleg
+
+```js
+const waffle_data = d3.csvParse(`group,freq
+Don't know,1064
+Totally disagree,3223
+Neither agree nor disagree,7899
+Tend to agree,11009
+Totally agree,2316`)
+
+function waffle(w_data, {width, height} = {}) {
+  const units = w_data.flatMap(d => d3.range(Math.round((d.freq / 25446) * 100)).map(() => d));
+  const groupDomain = [...new Set(units.map(d => d.group))];
+  
+  return Plot.plot({
+    marks: [
+      Plot.cell(
+        units,
+        Plot.stackX({
+          //x: (_, i) => Math.floor(i / rows),
+          y: (_, i) => i % 10,
+          fill: "group",
+          title: (iets, _) => Math.round((iets.freq / 25446) * 100) + "%"
+        })
+      ),
+      Plot.text(
+        units,
+        Plot.stackX({
+          y: (_, i) => i % 5,
+          text: "",
+        })
+      ),
+      () =>
+        svg`<style>
+            g[aria-label=cell] rect {fill-opacity: 0.8; transition: fill-opacity .2s; cursor: pointer}
+            g[aria-label=cell]:hover rect:not(:hover) {fill-opacity: 0.3;}
+            g[aria-label=cell] rect:hover {fill-opacity: 1;}
+        `
+    ],
+    x: { axis: null },
+    y: { axis: null , reverse: true},
+    color: {
+      legend: true,
+      type: "ordinal",
+      domain: groupDomain,
+      range: ["#888888", ...d3.schemeRdYlGn[groupDomain.length - 1].slice()]
+    }
+  });
+}
+```
+
+<div class="grid grid-cols-1">
+  <div class="card">
+    ${resize((width) => waffle(waffle_data, {width}))}
+  </div>
+</div>
 
 <style>
 
