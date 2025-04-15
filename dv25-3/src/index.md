@@ -1,71 +1,143 @@
 ---
+title: Introduction
 toc: false
 ---
 
 <div class="hero">
   <h1>Datavisualisatie project</h1>
   <h2>Welcome to your new app! Edit&nbsp;<code style="font-size: 90%;">src/index.md</code> to change this page.</h2>
-  <a href="https://observablehq.com/framework/getting-started">Get started<span style="display: inline-block; margin-left: 0.25rem;">↗︎</span></a>
 </div>
+hier komt de how well informed voor elk van de 6 categorieën
+<div class="card">${
+  resize((width) => Plot.plot({
+    title: "How big are penguins, anyway? 🐧",
+    width,
+    grid: true,
+    x: {label: "Body mass (g)"},
+    y: {label: "Flipper length (mm)"},
+    color: {legend: true},
+    marks: [
+      Plot.linearRegressionY(penguins, {x: "body_mass_g", y: "flipper_length_mm", stroke: "species"}),
+      Plot.dot(penguins, {x: "body_mass_g", y: "flipper_length_mm", stroke: "species", tip: true})
+    ]
+  }))
+}</div>
 
-<div class="grid grid-cols-2" style="grid-auto-rows: 504px;">
-  <div class="card">${
-    resize((width) => Plot.plot({
-      title: "Your awesomeness over time 🚀",
-      subtitle: "Up and to the right!",
-      width,
-      y: {grid: true, label: "Awesomeness"},
+```js
+const data = await FileAttachment("data/radar_chart.csv").csv({typed: true});
+function radar_chart(data, {width, height} = {}) {
+  const points = data.flatMap(({ Age, ...values }) => Object.entries(values).map(([key, value]) => ({ Age, key, value })))
+  const longitude = d3.scalePoint(new Set(Plot.valueof(points, "key")), [180, -180]).padding(0.5).align(1)
+
+  return Plot.plot({
+      width:700,
+      height:700,
+      marginTop: 30,
+      projection: {
+      type: "azimuthal-equidistant",
+      rotate: [0, -90],
+      domain: d3.geoCircle().center([0, 90]).radius(0.8)()
+      },
+      color: { legend: true },
       marks: [
-        Plot.ruleY([0]),
-        Plot.lineY(aapl, {x: "Date", y: "Close", tip: true})
+      // grey discs
+      Plot.geo([0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1], {
+          geometry: (r) => d3.geoCircle().center([0, 90]).radius(r)(),
+          stroke: "white",
+          fill: "white",
+          strokeOpacity: 0.3,
+          fillOpacity: 0.03,
+          strokeWidth: 0.5
+      }),
+  
+      // white axes
+      Plot.link(longitude.domain(), {
+          x1: longitude,
+          y1: 90 - 0.73,
+          x2: 0,
+          y2: 90,
+          stroke: "white",
+          strokeOpacity: 0.5,
+          strokeWidth: 3.5
+      }),
+  
+      // percentage labels
+      Plot.text([0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7], {
+          x: 180,
+          y: (d) => 90 - d,
+          dx: 2,
+          textAnchor: "start",
+          text: (d) => `${100 * d}%`,
+          fill: "black",
+          stroke: "white",
+          fontSize: 12
+      }),
+  
+      // axes labels
+      Plot.text(longitude.domain(), {
+          x: longitude,
+          y: 90 - 0.79,
+          text: Plot.identity,
+          lineWidth: 5,
+          fontSize: 16
+      }),
+  
+      // areas
+      Plot.area(points, {
+          x1: ({ key }) => longitude(key),
+          y1: ({ value }) => 90 - value,
+          x2: 0,
+          y2: 90,
+          fill: "Age",
+          stroke: "Age",
+          curve: "cardinal-closed"
+      }),
+  
+      // points
+      Plot.dot(points, {
+          x: ({ key }) => longitude(key),
+          y: ({ value }) => 90 - value,
+          fill: "Age",
+          stroke: "white"
+      }),
+  
+      // interactive labels
+      Plot.text(
+          points,
+          Plot.pointer({
+          x: ({ key }) => longitude(key),
+          y: ({ value }) => 90 - value,
+          text: (d) => `${(100 * d.value).toFixed(0)}%`,
+          textAnchor: "start",
+          dx: 4,
+          fill: "black",
+          stroke: "white",
+          maxRadius: 10
+          })
+      ),
+  
+      // interactive opacity on the areas
+      () =>
+          svg`<style>
+              g[aria-label=area] path {fill-opacity: 0.1; transition: fill-opacity .2s;}
+              g[aria-label=area]:hover path:not(:hover) {fill-opacity: 0.05; transition: fill-opacity .2s;}
+              g[aria-label=area] path:hover {fill-opacity: 0.3; transition: fill-opacity .2s;}
+          `
       ]
-    }))
-  }</div>
-  <div class="card">${
-    resize((width) => Plot.plot({
-      title: "How big are penguins, anyway? 🐧",
-      width,
-      grid: true,
-      x: {label: "Body mass (g)"},
-      y: {label: "Flipper length (mm)"},
-      color: {legend: true},
-      marks: [
-        Plot.linearRegressionY(penguins, {x: "body_mass_g", y: "flipper_length_mm", stroke: "species"}),
-        Plot.dot(penguins, {x: "body_mass_g", y: "flipper_length_mm", stroke: "species", tip: true})
-      ]
-    }))
-  }</div>
+  });
+}
+```
+## What are the main 2 sources used to gather information by age
+
+<div class="grid grid-cols-1">
+  <div class="card">
+    ${resize((width) => radar_chart(data, {width}))}
+  </div>
 </div>
 
----
+## Trust in scientific development with the use of AI, by education level
 
-## Next steps
-
-Here are some ideas of things you could try…
-
-<div class="grid grid-cols-4">
-  <div class="card">
-    Chart your own data using <a href="https://observablehq.com/framework/lib/plot"><code>Plot</code></a> and <a href="https://observablehq.com/framework/files"><code>FileAttachment</code></a>. Make it responsive using <a href="https://observablehq.com/framework/javascript#resize(render)"><code>resize</code></a>.
-  </div>
-  <div class="card">
-    Create a <a href="https://observablehq.com/framework/project-structure">new page</a> by adding a Markdown file (<code>whatever.md</code>) to the <code>src</code> folder.
-  </div>
-  <div class="card">
-    Add a drop-down menu using <a href="https://observablehq.com/framework/inputs/select"><code>Inputs.select</code></a> and use it to filter the data shown in a chart.
-  </div>
-  <div class="card">
-    Write a <a href="https://observablehq.com/framework/loaders">data loader</a> that queries a local database or API, generating a data snapshot on build.
-  </div>
-  <div class="card">
-    Import a <a href="https://observablehq.com/framework/imports">recommended library</a> from npm, such as <a href="https://observablehq.com/framework/lib/leaflet">Leaflet</a>, <a href="https://observablehq.com/framework/lib/dot">GraphViz</a>, <a href="https://observablehq.com/framework/lib/tex">TeX</a>, or <a href="https://observablehq.com/framework/lib/duckdb">DuckDB</a>.
-  </div>
-  <div class="card">
-    Ask for help, or share your work or ideas, on our <a href="https://github.com/observablehq/framework/discussions">GitHub discussions</a>.
-  </div>
-  <div class="card">
-    Visit <a href="https://github.com/observablehq/framework">Framework on GitHub</a> and give us a star. Or file an issue if you’ve found a bug!
-  </div>
-</div>
+Hier komt waffle chart
 
 <style>
 
