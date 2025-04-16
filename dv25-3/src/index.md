@@ -2,6 +2,29 @@
 title: Introduction
 toc: false
 ---
+```js
+const percentage = await FileAttachment("data/informed.csv").csv({typed: true});
+
+function stacked_bar(percentage, {width, height} = {}){
+  const tidy = percentage.columns.slice(1).flatMap(percent => percentage.map(d => ({subject: d.name, percent, percentage: d[percent]})));
+  return Plot.plot({
+    width: 928,
+    height: 600,
+    y: {label: null},
+    x: {axis: "top", tickFormat: "s"},
+    color: {scheme: "Blues", legend: true},
+    marks: [
+      Plot.barX(tidy, {
+        y: "subject",
+        x: "percentage",
+        fill: "percent",
+        sort: {color: null, y: "-x"}
+      })
+    ]
+  });
+}
+```
+
 
 ```js
 const data = await FileAttachment("data/radar_chart.csv").csv({typed: true});
@@ -201,24 +224,13 @@ Introduction about the survey and the dataset
 
 <br>Hier komt de stacked bar chart
 
-<div class="card">${
-  resize((width) => Plot.plot({
-    title: "How big are penguins, anyway?",
-    width,
-    grid: true,
-    x: {label: "Body mass (g)"},
-    y: {label: "Flipper length (mm)"},
-    color: {legend: true},
-    marks: [
-      Plot.linearRegressionY(penguins, {x: "body_mass_g", y: "flipper_length_mm", stroke: "species"}),
-      Plot.dot(penguins, {x: "body_mass_g", y: "flipper_length_mm", stroke: "species", tip: true})
-    ]
-  }))
-}</div>
+<div class="card">
+  ${resize((width) => stacked_bar(percentage, {width}))}
+</div>
 <br>
 <br>
 
-## What are the main 2 sources used to gather information by age?
+## How European citizens gather information
 
 <br>Uitleg ervoor
 
