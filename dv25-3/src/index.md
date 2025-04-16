@@ -6,11 +6,17 @@ toc: false
 const percentage = await FileAttachment("data/informed.csv").csv({typed: true});
 
 function stacked_bar(percentage, {width, height} = {}){
+  const firstCategory = percentage.columns[1];
+  const sortedSubjects = [...percentage]
+    .sort((a, b) => d3.ascending(a[firstCategory], b[firstCategory]))
+    .map(d => d.name);
   const tidy = percentage.columns.slice(1).flatMap(percent => percentage.map(d => ({subject: d.name, percent, percentage: d[percent]})));
+
   return Plot.plot({
     width: 928,
     height: 600,
-    y: {label: null},
+    marginLeft: 250,
+    y: {label: null, domain: sortedSubjects},
     x: {axis: "top", tickFormat: "s"},
     color: {scheme: "Blues", legend: true},
     marks: [
@@ -18,7 +24,7 @@ function stacked_bar(percentage, {width, height} = {}){
         y: "subject",
         x: "percentage",
         fill: "percent",
-        sort: {color: null, y: "-x"}
+        sort: {color: null}
       })
     ]
   });
