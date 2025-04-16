@@ -33,6 +33,16 @@ function stacked_bar(percentage, {width, height} = {}){
         fill: "percent",
         sort: {color: null}
       }),
+      Plot.ruleX([50], {
+        stroke: "black",
+        strokeDasharray: "4,4",
+        strokeWidth: 1.5
+      }),
+      Plot.text([50], {
+        text: "50%",
+        x: sortedSubjects[0],
+        textAnchor: "middle",
+      }),
       () =>
           svg`<style>
               g[aria-label=bar] rect {fill-opacity: 0.8; transition: fill-opacity .2s; cursor: pointer}
@@ -244,7 +254,7 @@ Introduction about the survey and the dataset
 <br>Uitleg ervoor
 
 <div class="card">
-  <div class="waffle-title">Nog een titel erbij</div>
+  <div class="waffle-title">For each of the following, please indicate if you are...</div>
   <div class="mt-4">
         ${Plot.legend({
           color: {
@@ -271,7 +281,7 @@ Uitleg erna
 <br>Uitleg ervoor
 
 <div class="card">
-  <div class="waffle-title">Main sources used to stay up to date</div>
+  <div class="waffle-title">What are the two main sources that you use the most to stay up to date?</div>
   <div class="grid">
     <div class="mt-4">
       ${Plot.legend({
@@ -302,7 +312,7 @@ Uitleg erna
 
 <br>Uitleg: vooral over de data
 <div class="card">
-  <div class="waffle-title">Titel moet nog erbij</div>
+  <div class="waffle-title">'AI used in science advances scientific discoveries that will lead to solutions to major challenges such as climate change and serious diseases'?</div>
   <div class="grid-3">
     <div class="grid-item">
       <div class="waffle-title">Primary maximum</div>
