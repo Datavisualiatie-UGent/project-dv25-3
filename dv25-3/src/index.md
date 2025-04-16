@@ -4,6 +4,11 @@ toc: false
 ---
 ```js
 const percentage = await FileAttachment("data/informed.csv").csv({typed: true});
+const informDomain = [
+  "Poorly informed",
+  "Moderately well-informed",
+  "Very well informed"
+];
 
 function stacked_bar(percentage, {width, height} = {}){
   const firstCategory = percentage.columns[1];
@@ -15,11 +20,11 @@ function stacked_bar(percentage, {width, height} = {}){
     height: 600,
     marginLeft: 400,
     marginTop: 40,
-    marginBottom: 40,
+    marginBottom: 20,
     style: {fontSize: "16px"},
     y: {label: null, domain: sortedSubjects},
     x: {axis: "top", tickFormat: d => `${d}%`, tickSize: 0},
-    color: {scheme: "Blues", legend: true},
+    color: {scheme: "Blues"},
     marks: [
       Plot.barX(tidy, {
         y: "subject",
@@ -70,7 +75,7 @@ function radar_chart(data, {width, height} = {}) {
       Plot.geo([0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1], {
           geometry: (r) => d3.geoCircle().center([0, 90]).radius(r)(),
           stroke: "white",
-          fill: "white",
+          fill: "black",
           strokeOpacity: 0.3,
           fillOpacity: 0.03,
           strokeWidth: 0.5
@@ -82,7 +87,7 @@ function radar_chart(data, {width, height} = {}) {
           y1: 90 - 0.73,
           x2: 0,
           y2: 90,
-          stroke: "white",
+          stroke: "black",
           strokeOpacity: 0.5,
           strokeWidth: 3.5
       }),
@@ -236,11 +241,28 @@ Introduction about the survey and the dataset
 
 ## How well is the European citizen informed?
 
-<br>Hier komt de stacked bar chart
+<br>Uitleg ervoor
 
 <div class="card">
+  <div class="waffle-title">Nog een titel erbij</div>
+  <div class="mt-4">
+        ${Plot.legend({
+          color: {
+            type: "ordinal",
+            domain: informDomain,
+            scheme: "Blues" 
+          },
+          columns: 4,
+          style: {
+              fontSize: "14px",
+              spacing: "0.5rem"
+            }
+        })}
+  </div>
   ${resize((width) => stacked_bar(percentage, {width}))}
 </div>
+Uitleg erna
+<br>
 <br>
 <br>
 
@@ -279,35 +301,37 @@ Uitleg erna
 ## Trust in scientific development with the use of AI
 
 <br>Uitleg: vooral over de data
-
-<div class="grid-3">
-  <div class="grid-item">
-    <div class="waffle-title">Primary maximum</div>
-    <div class="waffle-chart">${waffle(waffle_data1, 7828, { width: 300, height: 300 })}</div>
+<div class="card">
+  <div class="waffle-title">Titel moet nog erbij</div>
+  <div class="grid-3">
+    <div class="grid-item">
+      <div class="waffle-title">Primary maximum</div>
+      <div class="waffle-chart">${waffle(waffle_data1, 7828, { width: 300, height: 300 })}</div>
+    </div>
+    <div class="grid-item">
+      <div class="waffle-title">Secondary maximum</div>
+      <div class="waffle-chart">${waffle(waffle_data2, 2439, { width: 300, height: 300 })}</div>
+    </div>
+    <div class="grid-item">
+      <div class="waffle-title">One or two higher education</div>
+      <div class="waffle-chart">${waffle(waffle_data3, 4566, { width: 300, height: 300 })}</div>
+    </div>
   </div>
-  <div class="grid-item">
-    <div class="waffle-title">Secondary maximum</div>
-    <div class="waffle-chart">${waffle(waffle_data2, 2439, { width: 300, height: 300 })}</div>
-  </div>
-  <div class="grid-item">
-    <div class="waffle-title">One or two higher education</div>
-    <div class="waffle-chart">${waffle(waffle_data3, 4566, { width: 300, height: 300 })}</div>
-  </div>
-</div>
-<div class="grid">
-  <div class="mt-4">
-    ${Plot.legend({
-      color: {
-        type: "ordinal",
-        domain: groupDomain,
-        range: colorRange
-      },
-      columns: 6,
-      style: {
-          fontSize: "14px",
-          spacing: "0.5rem"
-        }
-    })}
+  <div class="grid">
+    <div class="mt-4">
+      ${Plot.legend({
+        color: {
+          type: "ordinal",
+          domain: groupDomain,
+          range: colorRange
+        },
+        columns: 4,
+        style: {
+            fontSize: "14px",
+            spacing: "0.5rem"
+          }
+      })}
+    </div>
   </div>
 </div>
 

@@ -1,5 +1,4 @@
 ---
-theme: dashboard
 title: Explore dashboard
 toc: false
 ---
