@@ -7,25 +7,33 @@ const percentage = await FileAttachment("data/informed.csv").csv({typed: true});
 
 function stacked_bar(percentage, {width, height} = {}){
   const firstCategory = percentage.columns[1];
-  const sortedSubjects = [...percentage]
-    .sort((a, b) => d3.ascending(a[firstCategory], b[firstCategory]))
-    .map(d => d.name);
+  const sortedSubjects = [...percentage].sort((a, b) => d3.ascending(a[firstCategory], b[firstCategory])).map(d => d.name);
   const tidy = percentage.columns.slice(1).flatMap(percent => percentage.map(d => ({subject: d.name, percent, percentage: d[percent]})));
 
   return Plot.plot({
     width: 928,
     height: 600,
-    marginLeft: 250,
+    marginLeft: 400,
+    marginTop: 40,
+    marginBottom: 40,
+    style: {fontSize: "16px"},
     y: {label: null, domain: sortedSubjects},
-    x: {axis: "top", tickFormat: "s"},
+    x: {axis: "top", tickFormat: d => `${d}%`, tickSize: 0},
     color: {scheme: "Blues", legend: true},
     marks: [
       Plot.barX(tidy, {
         y: "subject",
         x: "percentage",
+        title: (iets, _) => iets.percentage + "%",
         fill: "percent",
         sort: {color: null}
-      })
+      }),
+      () =>
+          svg`<style>
+              g[aria-label=bar] rect {fill-opacity: 0.8; transition: fill-opacity .2s; cursor: pointer}
+              g[aria-label=bar]:hover rect:not(:hover) {fill-opacity: 0.3;}
+              g[aria-label=bar] rect:hover {fill-opacity: 1;}
+              `
     ]
   });
 }
@@ -236,7 +244,7 @@ Introduction about the survey and the dataset
 <br>
 <br>
 
-## How European citizens gather information
+## How do European citizens gather information?
 
 <br>Uitleg ervoor
 
