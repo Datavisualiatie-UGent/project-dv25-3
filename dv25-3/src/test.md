@@ -1,3 +1,7 @@
+---
+title: test
+---
+
 <div class="card">
   <h3>Population Density Map</h3>
   <script type="module">

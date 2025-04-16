@@ -245,16 +245,24 @@ function waffle(w_data, total, {width, height} = {}) {
   <h1>European citizens: knowledge and attitudes towards science and technology</h1>
 </div>
 
-Introduction about the survey and the dataset
+<h4>How do Europeans perceive science and technology? What do they know, value, and expect from scientific advancements? This dataset presents the results of a wide-ranging European survey on public attitudes toward science and technology. It was conducted in 2024 and covers key themes such as knowledge and interest in science, perceptions of its impact on society, trust in scientific institutions, inclusiveness and diversity in science, and views on emerging technologies like artificial intelligence.</h4>
 <br>
 <br>
+<h4>Alongside a general introduction, this site also features two dedicated sections for deeper exploration:
+In the <b>Explore section</b>, you can interact with an EU map and a series of charts to compare country-level responses on key questions.
+In the <b>Social section</b>, we take a closer look at regional differences—comparing how various country groups view regulation, gender equality in science, and the future of jobs in an AI-driven world. These interactive visualizations aim to make complex survey data accessible, engaging, and useful for anyone interested in how science is perceived across Europe.
+<br>
+<br>
+<h4>Explore the data to see how perspectives differ by age, education, and region—and discover what the numbers say about the future relationship between science and society in Europe.</h4>
 
-## How well is the European citizen informed?
-
-<br>Uitleg ervoor
+<br><h2>How well is the European citizen informed?</h2>
+<br>
+<h4>This stacked bar chart shows how well-informed citizens feel about different science and technology topics. Each bar represents a topic and is divided into 3 categories summing up to 100%.</h4>
+<br>
+<h4>The dotted line at 50% helps you quickly see whether the majority of people feel at least somewhat informed about a topic—or not. Hover over each segment for exact percentages.</h4>
 
 <div class="card">
-  <div class="waffle-title">For each of the following, please indicate if you are...</div>
+  <div class="chart-title">For each of the following, please indicate whether you are...</div>
   <div class="mt-4">
         ${Plot.legend({
           color: {
@@ -271,17 +279,28 @@ Introduction about the survey and the dataset
   </div>
   ${resize((width) => stacked_bar(percentage, {width}))}
 </div>
-Uitleg erna
+<h4>The data reveals clear differences in how informed citizens feel about various societal and scientific topics. Overall, there is a trend suggesting that individuals feel less informed about scientific and technological matters than about more commonly discussed subjects like politics or sports.</h4>
 <br>
 <br>
+<h4><b>Medical discoveries</b> and <b>scientific or technological developments</b> are areas where citizens report feeling the least informed. Nearly half of respondents (48%) feel poorly informed about medical breakthroughs, and 44% say the same about scientific and technological developments. Only 10–11% feel very well informed in these categories. This indicates a significant gap in public engagement or accessibility to information in the fields most closely tied to innovation and public health.</h4>
 <br>
+<br>
+<h4>In contrast, <b>sports news</b> and <b>culture and arts</b> evoke stronger feelings of being informed. These topics show higher percentages in the very well informed category, with 26% for sports and 12% for culture, suggesting that people may have easier access to or more interest in these areas through media and daily conversations.</h4>
+<br>
+<br>
+<h4><b>Politics</b> and <b>environmental issues</b>, which frequently dominate public discourse, show a relatively more balanced spread. A majority of citizens report being moderately well-informed (51–56%), and around a quarter feel very well informed. This suggests that while people may engage with these topics, the complexity or polarized nature of political and environmental discussions might limit a broader sense of deep understanding.</h4>
+<br>
+<br>
+<h4>The results underline a need for improved science communication, particularly in the fields of medicine and technology, where innovation directly affects public well-being. Making complex topics more accessible and engaging through trustworthy sources could help bridge the current knowledge gap and empower citizens to better navigate societal changes driven by scientific advancements.</h4>
 
-## How do European citizens gather information?
-
-<br>Uitleg ervoor
+<br><h2>How do European citizens gather information?</h2>
+<br>
+<h4>This radar chart shows the main sources of information used by different age groups to stay up to date with science and technology. Each axis represents a different source and the lines show how frequently each age group relies on them.</h4>
+<br>
+<h4>The chart makes it easy to compare patterns across age groups and spot generational differences in information habits.</h4>
 
 <div class="card">
-  <div class="waffle-title">What are the two main sources that you use the most to stay up to date?</div>
+  <div class="chart-title">What are the two main sources that you use the most to stay up to date?</div>
   <div class="grid">
     <div class="mt-4">
       ${Plot.legend({
@@ -302,17 +321,24 @@ Uitleg erna
   </div>
   <div class="waffle-title"> </div>
 </div>
-
-Uitleg erna
+<h4>The data highlights distinct generational differences in how people stay informed about science and related topics.</h4>
 <br>
 <br>
+<h4><b>Television</b> remains the dominant source across all age groups, especially among older citizens—69% of those aged 55–64 rely on TV, compared to 50% of those aged 15–24. Newspapers follow a similar trend, with usage increasing with age.</h4>
 <br>
+<h4>In contrast, younger people rely far more on <b>online social networks and blogs</b>, a stark difference from older age groups. This demographic is also more likely to consult online encyclopaedias, indicating a preference for digital, accessible platforms.</h4>
+<br>
+<h4><b>Books and magazines</b> show moderate use across all groups, while <b>scientific journals</b> remain niche, particularly among younger and older groups. Interestingly, <b>radio and podcasts</b> have relatively low but consistent engagement, regardless of age.</h4>
+<br>
+<br>
+<h4>Overall, the results suggest a clear digital divide, with younger individuals gravitating toward informal, online sources, while older groups lean heavily on traditional media. These patterns underscore the importance of tailoring science communication to the platforms most trusted and accessed by each age group.</h4>
 
-## Trust in scientific development with the use of AI
+<br><h2>Trust in scientific development with the use of AI</h2>
+<br>
+<h4>This waffle chart illustrates how citizens with different levels of education perceive the role of AI in advancing scientific discoveries. Each level indicates the highest obtained degree of the individual's parents and is represented by a separate chart. The colored blocks show the distribution of agreement levels with the statement, from strong disagreement to strong agreement, making it easy to see how opinions vary by education level. Each block represents 1% of the group’s responses.</h4>
 
-<br>Uitleg: vooral over de data
 <div class="card">
-  <div class="waffle-title">'AI used in science advances scientific discoveries that will lead to solutions to major challenges such as climate change and serious diseases'?</div>
+  <div class="chart-title">'AI used in science advances scientific discoveries that will lead to solutions to major challenges such as climate change and serious diseases'?</div>
   <div class="grid-3">
     <div class="grid-item">
       <div class="waffle-title">Primary maximum</div>
@@ -345,8 +371,17 @@ Uitleg erna
   </div>
 </div>
 
-Vervolg van de uitleg: wat we kunnen zien en afleiden uit de mooie visualisatie
-
+<h4>The data reveals a clear correlation between educational background and positive perceptions of AI’s role in scientific progress.</h4>
+<br>
+<br>
+<h4>Respondents with at least one parent having higher education show the strongest agreement, with more than half expressing positive views. The proportion of strong disagreement is relatively low in this group.</h4>
+<br>
+<h4>Those with at most secondary education are slightly less enthusiastic but still show a favorable lean, with a significant share agreeing, though neutrality is more common.</h4>
+<br>
+<h4>Survey participants whose parents had at most a primary education express more uncertainty and skepticism, with a higher proportion of 'Don't know', although the percentage of 'Totally disagree' remains exactly the same across all 3 levels.</h4>
+<br>
+<br>
+<h4>Overall, <b>confidence in AI’s benefits for science appears to rise with educational attainment</b>, suggesting that familiarity with scientific or technological environments may enhance trust in the usage of AI.</h4>
 
 <style>
 .waffle-chart {
@@ -357,6 +392,12 @@ Vervolg van de uitleg: wat we kunnen zien en afleiden uit de mooie visualisatie
 .waffle-title {
   font-weight: 600;
   margin-bottom: 0.5rem;
+}
+
+.chart-title {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  font-size: 18px;
 }
 
 .hero {
@@ -404,4 +445,10 @@ Vervolg van de uitleg: wat we kunnen zien en afleiden uit de mooie visualisatie
 h2 {
   display: inline;
 }
+
+h4 {
+  display: inline;
+  font-weight: normal;
+}
+
 </style>

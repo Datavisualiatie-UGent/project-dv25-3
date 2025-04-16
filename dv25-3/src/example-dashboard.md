@@ -37,13 +37,21 @@ function vehicleChart(data, {width}) {
   });
 }
 ```
-# Europa interactieve kaart
-kaart komt hier
+<h1>Explore the survey</h1>
+<br><h2>Europa interactieve kaart</h2>
+<br>
+<br>
+<h4>To make the insights more interactive and comparable, we've added a dedicated Explore section where you can dive into country-level responses across a range of key questions. Start by using the EU map with a dropdown menu to select the questions you're most interested in—then instantly see how each country responds. This map provides a powerful overview of geographical patterns and national differences.</h4>
 
-# 2e Graph
-nog een leuke plot voor de data te leren kennen: mss univariate scatter plot?
+kaart komt hier:
 
-welke vraag/onderwerp?
+<br>
+<h2>Bubble chart met alle landen: internet usage everyday</h2>
+<br>
+<br>
+<h4>Curious about digital habits? Check out our bubble chart, where each country is represented by a circle sized by population and colored by the percentage of people who use the internet daily. It's a simple, visual way to grasp how digital engagement varies across Europe.</h4>
+
+plot vervangen:
 
 <div class="grid grid-cols-1">
   <div class="card">
@@ -51,3 +59,13 @@ welke vraag/onderwerp?
   </div>
 </div>
 
+<style>
+h2 {
+  display: inline;
+}
+
+h4 {
+  display: inline;
+  font-weight: normal;
+}
+</style>

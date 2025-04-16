@@ -1,36 +1,44 @@
 ---
-title: Social impact/views
+title: Social views of technology
 ---
 
-# How does technology impact the social views and aspect of European society?
+<h1>How does technology impact the social views and aspect of European society?</h1>
+<br>
+<br>
+<h4>In this section, we zoom in on public opinion around key societal issues—comparing results across regional blocs such as the EU27, the Eurozone, the Balkans, and Non-Euro countries.</h4>
 
-Korte inleiding schrijven
-
-## The Space Shuttle era (voorbeeld)
-
-```js
-import {timeline} from "./components/timeline.js";
-```
-
-```js
-const events = FileAttachment("./data/events.json").json();
-```
-
-```js
-timeline(events, {height: 300})
-```
-
-## Gender Equality
+<br><h2>Gender Equality</h2>
+<br>
+<br>
 QA16
 
-Welke graph?
+slope graph 2021-2024
 
-## Impact of AI and automation on jobs
+<br><h2>Should technology be regulated?</h2>
+<br>
+<br>
+QA11b
 
+back-to-back bar chart
+
+<br><h2>Impact of AI and automation on jobs</h2>
+<br>
+<br>
 QA8.2 
 
 welke graph?
 
-## Nog een leuk verband/ontdekking
+<style>
+h1 {
+    display: inline;
+}
 
-in volume_BP spreadsheet
+h2 {
+  display: inline;
+}
+
+h4 {
+  display: inline;
+  font-weight: normal;
+}
+</style>
