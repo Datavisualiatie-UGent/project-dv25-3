@@ -1,15 +1,7 @@
 ---
-title: Explore dashboard
+title: Explore
 toc: false
 ---
-# Europa interactieve kaart
-kaart komt hier
-
-# Stacked Bar Chart
-meningen per land +EU27 gemiddelde
-welke vraag/onderwerp?
-
-<!-- Load and transform the data -->
 
 ```js
 const launches = FileAttachment("data/launches.csv").csv({typed: true});
@@ -26,8 +18,6 @@ const color = Plot.scale({
   }
 });
 ```
-
-<!-- Plot of launch vehicles -->
 
 ```js
 function vehicleChart(data, {width}) {
@@ -47,6 +37,13 @@ function vehicleChart(data, {width}) {
   });
 }
 ```
+# Europa interactieve kaart
+kaart komt hier
+
+# 2e Graph
+nog een leuke plot voor de data te leren kennen: mss univariate scatter plot?
+
+welke vraag/onderwerp?
 
 <div class="grid grid-cols-1">
   <div class="card">
