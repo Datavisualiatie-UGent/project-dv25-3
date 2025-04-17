@@ -1,5 +1,6 @@
 ---
 title: Social views of technology
+toc: false
 ---
 
 ```js
@@ -38,7 +39,8 @@ function slope_graph(gender, {width, height} = {}){
   const lastYear = Math.max(...years);
 
   return Plot.plot({
-  height: 310,
+  height: 300,
+  width: 320,
   style: { fontSize: "14px" },
   color: {
       type: "categorical",
@@ -55,8 +57,8 @@ function slope_graph(gender, {width, height} = {}){
           x: "year",
           y: "percent",
           text: left
-            ? (d) => `${d.country} ${d.percent}`
-            : (d) => `${d.percent} ${d.country}`,
+            ? (d) => `${d.country} ${d.percent}%`
+            : (d) => `${d.percent}% ${d.country}`,
           fill: "country",
           textAnchor: left ? "end" : "start",
           dx: left ? -3 : 3,
@@ -75,10 +77,10 @@ function slope_graph(gender, {width, height} = {}){
 
 <br><h2>Gender Equality</h2>
 <br>
-<br>
+<h4>Hier moet nog wat uitleg bijkomen</h4>
 
 <div class="card">
-  <div class="chart-title">What percentage of citizens agrees that gender equality is beneficial?</div>
+  <div class="chart-title">What percentage of citizens agrees that gender equality could...</div>
   <div class="grid-3">
     <div class="grid-item">
       <div class="slope-title">Improve outcomes of science and technology</div>
@@ -94,6 +96,8 @@ function slope_graph(gender, {width, height} = {}){
     </div>
   </div>
 </div>
+
+<h4>Hier moet nog wat uitleg bijkomen</h4>
 
 <br><h2>Should technology be regulated?</h2>
 <br>
@@ -137,5 +141,19 @@ h4 {
 .slope-chart {
   width: 500px;
   text-align: center;
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0rem;
+  justify-items: center;
+  align-items: start;
+  margin-top: 2rem;
+}
+
+.grid-item {
+  text-align: center;
+  width: 300px;
 }
 </style>
