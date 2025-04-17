@@ -73,11 +73,11 @@ function slope_graph(gender, {width, height} = {}){
 <h1>How does technology impact the social views and aspect of European society?</h1>
 <br>
 <br>
-<h4>In this section, we zoom in on public opinion around key societal issues—comparing results across regional blocs such as the EU27, the Eurozone, the Balkans, and Non-Euro countries.</h4>
+<h4>In this section, we zoom in on public opinion around key societal issues—comparing results across regional blocs such as the <b>EU27</b>, the <b>Eurozone</b>, the <b>Balkans</b>, and <b>Non-Euro countries</b>.</h4>
 
-<br><h2>Gender Equality</h2>
+<br><h2>How do citizens view gender equality in relation to science, the economy, and fairness?</h2>
 <br>
-<h4>Hier moet nog wat uitleg bijkomen</h4>
+<h4>This slope graph highlights the change in public opinion between 2021 and 2024 across the different European regions. It visualizes the percentage of people who agree that gender equality can improve science and technology outcomes, benefit the economy, and contribute to a fairer society.</h4>
 
 <div class="card">
   <div class="chart-title">What percentage of citizens agrees that gender equality could...</div>
@@ -97,7 +97,13 @@ function slope_graph(gender, {width, height} = {}){
   </div>
 </div>
 
-<h4>Hier moet nog wat uitleg bijkomen</h4>
+<h4>Based on the data presented in the slope graphs, we observe a generally <b>positive perception of gender equality</b> across all European regions. However, there are slight <b>decreases</b> in agreement levels from 2021 to 2024 across most indicators.</h4>
+<ul>
+  <li>Belief in gender equality improving science and technology dropped modestly in most regions, especially in the EU27 and Eurozone.</li>
+  <li>The view that gender equality boosts business and the economy also saw a small decline, most notably outside the Eurozone.</li>
+  <li>Confidence in gender equality's role in creating a fairer society remains the highest overall, though even this saw a minor dip in the EU27 and Eurozone.</li>
+</ul>
+<h4>These small downward shifts may reflect growing societal tensions, economic uncertainty, or evolving political narratives around equity and inclusion. Despite the declines, support remains relatively strong, especially in the belief that gender equality promotes fairness—indicating it is still viewed as a cornerstone for societal progress. Continued public engagement and education on the benefits of equality may help maintain or even reverse this trend in future years.</h4>
 
 <br><h2>Should technology be regulated?</h2>
 <br>
@@ -125,6 +131,10 @@ h2 {
 h4 {
   display: inline;
   font-weight: normal;
+}
+
+ul {
+  max-width: 100%;
 }
 
 .chart-title {
