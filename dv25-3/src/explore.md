@@ -7,6 +7,35 @@ toc: false
 const launches = FileAttachment("data/launches.csv").csv({typed: true});
 ```
 
+```js
+const q6Attachments = {
+  "Artificial Intelligence": FileAttachment("data/q6_Artificial Intelligence .csv").csv({typed: true}),
+  "Biotechnology and genetic engineering": FileAttachment("data/q6_Biotechnology and genetic engineering.csv").csv({typed: true}),
+  "Brain and cognitive enhancement": FileAttachment("data/q6_Brain and cognitive enhancement.csv").csv({typed: true}),
+  "Information and Communication Technology": FileAttachment("data/q6_Information and Communication Technology.csv").csv({typed: true}),
+  "Nanotechnology": FileAttachment("data/q6_Nanotechnology.csv").csv({typed: true}),
+  "Nuclear energy for energy production": FileAttachment("data/q6_Nuclear energy for energy production .csv").csv({typed: true}),
+  "Renewable energies": FileAttachment("data/q6_Renewable energies.csv").csv({typed: true}),
+  "Space exploration": FileAttachment("data/q6_Space exploration .csv").csv({typed: true}),
+  "Vaccines and combatting infectious diseases": FileAttachment("data/q6_Vaccines and combatting infectious diseases .csv").csv({typed: true})
+};
+
+// Display the header line of each CSV to prove it worked
+for (const [key, value] of Object.entries(q6Attachments)) {
+  value.then((data) => {
+    console.log(`Header for ${key}:`, data.columns);
+  }).catch((error) => {
+    console.error(`Failed to load ${key}:`, error);
+  });
+}
+
+const selectedTopic = Inputs.select(Object.keys(q6Attachments), {unique: true, sort: true, label: "Topic:"});
+```
+
+<div class="card" style="display: flex; flex-direction: column; gap: 1rem;">
+  ${selectedTopic}
+</div>
+
 <!-- A shared color scale for consistency, sorted by the number of launches -->
 
 ```js

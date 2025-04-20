@@ -10,7 +10,7 @@ export default {
   //   {
   //     name: "Examples",
   //     pages: [
-  //       {name: "Dashboard", path: "/example-dashboard"},
+  //       {name: "Dashboard", path: "/explore"},
   //       {name: "Report", path: "/example-report"}
   //     ]
   //   }
