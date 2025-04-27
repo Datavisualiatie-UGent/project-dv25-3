@@ -12,6 +12,10 @@ const launches = FileAttachment("data/launches.csv").csv({typed: true});
 ```
 
 ```js
+const datasetbar = FileAttachment("data/q6_Artificial Intelligence .csv").csv({typed: true});
+```
+
+```js
 const countryCodeMapping = {
   BE: "BEL", // Belgium
   BG: "BGR", // Bulgaria
@@ -153,13 +157,13 @@ createMap(mapData);
   <div style="font-family: monospace; line-height: 1.5;">
     <h3>Percentage of positive votes per country for this topic</h3>
   </div>
-  
+
   <div>
     ${topic}
   </div>
 
   <div id="container" style="position: relative; width: 500px; height: 300px;"></div>
-  
+
 </div>
 
 
@@ -210,9 +214,124 @@ kaart komt hier:
 
 plot vervangen:
 
+<br>
+<h2>Stacked bar chart</h2>
+<br>
+<br>
+<h4>A stacked bar chart of people's opinion on the impact of AI in their life. the width of the bars corresponds width the amount of people from these places in the dataset.</h4>
+
+```js
+function barChart(data, {w}){
+  const parseddata= data.map(d => [parseInt(d['don\'t know']),parseInt(d['very positive']),parseInt(d['fairly positive']),parseInt(d['no effect']),parseInt(d['fairly negative']),parseInt(d['very negative'])])
+
+  const width = 2500;
+  const height = 300;
+  const graph = d3.select('body').append('svg').attr("width",w).attr("height",height);
+
+  const barHeigth = 200;
+
+  const scale = 1/36
+
+  const buffer = 30
+
+  const color_dontknow='#A9A9A9'
+  const color_verygood='#228B22'
+  const color_good='#ADFF2F'
+  const color_neutral='#FFD700'
+  const color_bad='#FF8C00'
+  const color_verybad='#e41a1c'
+
+  const colors = [color_dontknow,color_verygood,color_good,color_neutral,color_bad,color_verybad]
+  const colordefs=["geen mening","heel positief","vrij positief","neutraal","vrij negatief","heel negatief"]
+
+  graph.append("g")
+    .selectAll("g")
+    .data(parseddata)
+    .enter().append("g")
+      .attr("x", function(d,i) {
+        var parsum=0;
+        for (let j = 0; j < i; j++){
+          parsum+=parseddata[j].reduce((partialSum, a) => partialSum + a, 0);
+        }
+        return parsum*scale+i*1;
+      })
+      //.attr("x", (d, i) => i * 21)
+      .attr("index", (d, i) => i)
+      .attr("sum", d => d.reduce((partialSum, a) => partialSum + a, 0))
+      //.attr("data", (d, i) => d)
+    .selectAll("rect")
+    .data((d,i) => parseddata[i])
+    .enter().append("rect")
+      .attr("x",function() {
+        return d3.select(this.parentNode).attr("x");
+        })
+      // .attr("x",function() {
+      //   let ind=d3.select(this.parentNode).attr("index");
+      //   return ind*20;
+      //   })
+      .attr("y",function(d,i) {
+        let ind=d3.select(this.parentNode).attr("index");
+        let dat=parseddata[ind].slice(0, i);
+        let parsum = dat.reduce((partialSum, a) => partialSum + a, 0);
+        return parsum*barHeigth/d3.select(this.parentNode).attr("sum")+buffer;
+        })
+      .attr("width",function(d,i){
+        return d3.select(this.parentNode).attr("sum")*scale;
+      })
+      .attr("height",function(d,i){
+        return d*barHeigth/d3.select(this.parentNode).attr("sum");
+      })
+      .attr("fill",(d,i) => colors[i]);
+
+
+
+  graph.append("g")
+    .selectAll("text")
+    .data(parseddata)
+    .enter()
+    .append("text")
+    .text((d,i) => data[i]["country"])
+    .style("text-anchor", "middle")
+    .style("font-size", "8px")
+    .attr("y",buffer+barHeigth+20)
+    .attr("x",function(d,i) {
+      var parsum=0;
+        for (let j = 0; j < i; j++){
+          parsum+=parseddata[j].reduce((partialSum, a) => partialSum + a, 0);
+        }
+      var begin=parsum*scale+1*i;
+      var sum=d.reduce((partialSum, a) => partialSum + a, 0)
+      return begin+sum*scale/2;
+    });
+
+  graph.append("g")
+    .selectAll("rect")
+    .data(colors)
+    .enter()
+    .append("rect")
+    .attr("x",(d,i) => 10+i*150)
+    .attr("y",10)
+    .attr("width",10)
+    .attr("height",10)
+    .attr("fill", d => d);
+
+  graph.append("g")
+    .selectAll("text")
+    .data(colors)
+    .enter()
+    .append("text")
+    .attr("x",(d,i) => 20+i*150)
+    .attr("y",20)
+    .text((d,i) => colordefs[i]);
+
+  return graph.node();
+}
+
+```
+
 <div class="grid grid-cols-1">
   <div class="card">
-    ${resize((width) => vehicleChart(launches, {width}))}
+    ${resize((width) => barChart(data, {width}))}
   </div>
 </div>
 
