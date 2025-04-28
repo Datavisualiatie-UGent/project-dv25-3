@@ -4,6 +4,46 @@ toc: false
 ---
 
 ```js
+const countryCodeMapping = {
+  BE: "Belgium",
+  BG: "Bulgaria",
+  CZ: "Czech Republic",
+  DK: "Denmark",
+  "D-W": "Germany (West)",
+  DE: "Germany",
+  "D-E": "Germany (East)",
+  EE: "Estonia",
+  IE: "Ireland",
+  EL: "Greece",
+  ES: "Spain",
+  FR: "France",
+  HR: "Croatia",
+  IT: "Italy",
+  CY: "Cyprus",
+  LV: "Latvia",
+  LT: "Lithuania",
+  LU: "Luxembourg",
+  HU: "Hungary",
+  MT: "Malta",
+  NL: "Netherlands",
+  AT: "Austria",
+  PL: "Poland",
+  PT: "Portugal",
+  RO: "Romania",
+  SI: "Slovenia",
+  SK: "Slovakia",
+  FI: "Finland",
+  SE: "Sweden",
+  TR: "Turkey",
+  MK: "North Macedonia",
+  ME: "Montenegro",
+  RS: "Serbia",
+  AL: "Albania",
+  UK: "United Kingdom",
+  BA: "Bosnia and Herzegovina",
+  XK: "Kosovo"
+};
+
 const q6Attachments = {
   "Artificial Intelligence": FileAttachment("data/q6_Artificial Intelligence .csv").csv({typed: true}),
   "Biotechnology and genetic engineering": FileAttachment("data/q6_Biotechnology and genetic engineering.csv").csv({typed: true}),
@@ -24,14 +64,13 @@ for (const [key, value] of Object.entries(q6Attachments)) {
     console.error(`${key}: Failed to load`, error);
   });
 }
-
-const formTopic = Inputs.select(Object.keys(q6Attachments), {unique: true, sort: true, label: "Topic:"});
 ```
 
 
 ```js
 const params = new URLSearchParams(window.location.search);
 const selectedCountry = params.get("country") ?? "FR";
+const title = countryCodeMapping[selectedCountry];
 
 const barPlots = (async () => {
   const sentimentOrder = [
@@ -75,6 +114,6 @@ return html`<div style="display: flex; flex-direction: column; gap: 1rem;">
 ```
 
 <div class="card" style="display: flex; flex-direction: column; gap: 1rem;">
-    The counted awnsers per topic for ${selectedCountry}:
+    The counted awnsers per topic for ${title}:
     ${resize((width) => barPlots)} 
 </div>

@@ -216,7 +216,9 @@ function createMap(mapData) {
     done: function(datamap) {
       datamap.svg.selectAll('.datamaps-subunit').on('click', function(geography) {
         console.log("Clicked:", geography.id, geography.properties.name);
-        window.location.href = `/detail?country=${reversedMapping[geography.id]}`;
+        if (reversedMapping[geography.id]){
+          window.location.href = `/detail?country=${reversedMapping[geography.id]}`;
+        }
       });
     }
   });
@@ -255,10 +257,10 @@ function vehicleChart(data, {width}) {
 }
 ```
 <h1>Explore the survey</h1>
-<br><h2>Europa interactieve kaart</h2>
+<br><h2>Europe interactive map</h2>
 <br>
 <br>
-<h4>To make the insights more interactive and comparable, we've added a dedicated Explore section where you can dive into country-level responses across a range of key questions. Start by using the EU map with a dropdown menu to select the questions you're most interested in—then instantly see how each country responds. This map provides a powerful overview of geographical patterns and national differences.</h4>
+<h4>To make the insights more interactive and comparable, we've added a dedicated Explore section where you can dive into country-level responses across a range of key questions. Start by using the EU map with a dropdown menu to select the questions you're most interested in—then instantly see how each country responds. This map provides a powerful overview of geographical patterns and national differences. You can then click a country to go to a more detailed page.</h4>
 
 <!-- resize trick om te zorgen dat js pas laad als deze html geladen  -->
 <div class="card" style="display: flex; flex-direction: column; gap: 1rem;">
