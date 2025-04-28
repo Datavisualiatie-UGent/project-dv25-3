@@ -112,13 +112,6 @@ QA11b
 
 back-to-back bar chart
 
-<br><h2>Impact of AI and automation on jobs</h2>
-<br>
-<br>
-QA8.2 
-
-welke graph?
-
 <style>
 h1 {
     display: inline;

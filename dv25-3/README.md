@@ -29,7 +29,7 @@ A typical Framework project looks like this:
 │  │  ├─ launches.csv.js       # a data loader
 │  │  └─ events.json           # a static data file
 │  ├─ explore.md     # a page
-│  ├─ example-report.md        # another page
+│  ├─ social.md        # another page
 │  └─ index.md                 # the home page
 ├─ .gitignore
 ├─ observablehq.config.js      # the app config file
