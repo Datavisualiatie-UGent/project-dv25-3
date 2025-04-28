@@ -392,6 +392,7 @@ In the <b>Social section</b>, we take a closer look at regional differences—co
 .waffle-title {
   font-weight: 600;
   margin-bottom: 0.5rem;
+  margin-right: 1rem;
 }
 
 .chart-title {
