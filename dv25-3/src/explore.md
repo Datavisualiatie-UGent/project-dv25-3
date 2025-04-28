@@ -320,7 +320,7 @@ function vehicleChart(data, {width}) {
 </div>
 
 <br>
-<h2>Bubble chart met alle landen: internet usage everyday</h2>
+<h2>Bubble chart met alle landen: internet usage everyday?</h2>
 <br>
 <br>
 <h4>Curious about digital habits? Check out our bubble chart, where each country is represented by a circle sized by population and colored by the percentage of people who use the internet daily. It's a simple, visual way to grasp how digital engagement varies across Europe.</h4>

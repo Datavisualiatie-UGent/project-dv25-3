@@ -338,18 +338,18 @@ In the <b>Social section</b>, we take a closer look at regional differences—co
 <h4>This waffle chart illustrates how citizens with different levels of education perceive the role of AI in advancing scientific discoveries. Each level indicates the highest obtained degree of the individual's parents and is represented by a separate chart. The colored blocks show the distribution of agreement levels with the statement, from strong disagreement to strong agreement, making it easy to see how opinions vary by education level. Each block represents 1% of the group’s responses.</h4>
 
 <div class="card">
-  <div class="chart-title">'AI used in science advances scientific discoveries that will lead to solutions to major challenges such as climate change and serious diseases'?</div>
+  <div class="chart-title">Agreement with AI Advancing Scientific Progress, by Parental Education Level</div>
   <div class="grid-3">
     <div class="grid-item">
-      <div class="waffle-title">Primary maximum</div>
+      <div class="waffle-title">Primary education (max both parents)</div>
       <div class="waffle-chart">${waffle(waffle_data1, 7828, { width: 300, height: 300 })}</div>
     </div>
     <div class="grid-item">
-      <div class="waffle-title">Secondary maximum</div>
+      <div class="waffle-title">Secondary education (max both parents)</div>
       <div class="waffle-chart">${waffle(waffle_data2, 2439, { width: 300, height: 300 })}</div>
     </div>
     <div class="grid-item">
-      <div class="waffle-title">One or two higher education</div>
+      <div class="waffle-title">At least one parent with higher education</div>
       <div class="waffle-chart">${waffle(waffle_data3, 4566, { width: 300, height: 300 })}</div>
     </div>
   </div>
@@ -392,6 +392,7 @@ In the <b>Social section</b>, we take a closer look at regional differences—co
 .waffle-title {
   font-weight: 600;
   margin-bottom: 0.5rem;
+  margin-right: 1rem;
 }
 
 .chart-title {
