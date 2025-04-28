@@ -51,6 +51,15 @@ const countryCodeMapping = {
   BA: "BIH", // Bosnia and Herzegovina
   XK: "XKX" // Kosovo
 };
+
+const reversedMapping = {};
+
+for (const [key, value] of Object.entries(countryCodeMapping)) {
+  if (key === "D-E" || key === "D-W") {
+    continue; // map doesnt support split germany
+  }
+  reversedMapping[value] = key;
+}
 ```
 
 ```js
@@ -110,8 +119,8 @@ data.forEach(row => {
   }
 });
 
-let paletteScale = d3.scaleLinear([min,max], ["#EFEFFF","#02386F"]); // blue color
-// Create a fills object dynamically based on the scale
+let paletteScale = d3.scaleSequential(d3.interpolateViridis)
+  .domain([min, max]);// Create a fills object dynamically based on the scale
 const fills = {
   defaultFill: "#D3D3D3"
 };
@@ -121,14 +130,82 @@ for (const key in mapData) {
 ```
 
 ```js
+function createLegend(min, max, paletteScale) {
+  const width = 50;
+  const height = 300;
+  const steps = 10;
+
+  const legendSvg = d3.create("svg")
+    .attr("width", width)
+    .attr("height", height + 40); // extra for labels
+
+  // Create gradient
+  const gradientId = "legend-gradient";
+  const defs = legendSvg.append("defs");
+  const gradient = defs.append("linearGradient")
+    .attr("id", gradientId)
+    .attr("x1", "0%").attr("y1", "100%") // vertical from bottom to top
+    .attr("x2", "0%").attr("y2", "0%");
+
+  // Add color stops
+  for (let i = 0; i <= steps; i++) {
+    const t = i / steps;
+    const value = min + (max - min) * t;
+    gradient.append("stop")
+      .attr("offset", `${t * 100}%`)
+      .attr("stop-color", paletteScale(value));
+  }
+
+  // Draw the gradient rect
+  legendSvg.append("rect")
+    .attr("x", 10)
+    .attr("y", 10)
+    .attr("width", 20)
+    .attr("height", height)
+    .style("fill", `url(#${gradientId})`);
+
+  // Add min/max labels
+  legendSvg.append("text")
+    .attr("x", 5)
+    .attr("y", height + 17)
+    .attr("font-size", "12px")
+    .attr("alignment-baseline", "middle")
+    .text(`${min}%`);
+
+  legendSvg.append("text")
+    .attr("x", 5)
+    .attr("y", 6)
+    .attr("font-size", "12px")
+    .attr("alignment-baseline", "middle")
+    .text(`${max}%`);
+
+  return legendSvg.node(); // return the DOM element
+}
+
+const legend = createLegend(min,max,paletteScale);
+```
+
+
+```js
 function createMap(mapData) {
   // Destroy the existing map if it exists
   const container = document.getElementById('container');
   container.innerHTML = '';
-  new Datamap({
+  var map = new Datamap({
     element: document.getElementById('container'),
-    fills: fills,  // Use dynamic fills here
-    data: mapData,  // The mapData with `fillKey`
+    fills: fills,
+    data: mapData,
+    setProjection: function(element) {
+      var projection = d3.geoEquirectangular()
+        .center([20, 50])
+        .rotate([0, 0])
+        .scale(400)
+        .translate([element.offsetWidth / 2, element.offsetHeight / 2]);
+      var path = d3.geoPath()
+        .projection(projection);
+
+      return {path: path, projection: projection};
+    },
     geographyConfig: {
       popupTemplate: function(geo, data) {
         return `<div class="hoverinfo">
@@ -139,30 +216,13 @@ function createMap(mapData) {
     done: function(datamap) {
       datamap.svg.selectAll('.datamaps-subunit').on('click', function(geography) {
         console.log("Clicked:", geography.id, geography.properties.name);
+        window.location.href = `/detail?country=${reversedMapping[geography.id]}`;
       });
     }
   });
 }
 createMap(mapData);
 ```
-
-
-<div class="card" style="display: flex; flex-direction: column; gap: 1rem;">
-  ${formTopic}
-
-  <div style="font-family: monospace; line-height: 1.5;">
-    <h3>Percentage of positive votes per country for this topic</h3>
-  </div>
-  
-  <div>
-    ${topic}
-  </div>
-
-  <div id="container" style="position: relative; width: 500px; height: 300px;"></div>
-  
-</div>
-
-
 
 <!-- A shared color scale for consistency, sorted by the number of launches -->
 
@@ -200,7 +260,22 @@ function vehicleChart(data, {width}) {
 <br>
 <h4>To make the insights more interactive and comparable, we've added a dedicated Explore section where you can dive into country-level responses across a range of key questions. Start by using the EU map with a dropdown menu to select the questions you're most interested in—then instantly see how each country responds. This map provides a powerful overview of geographical patterns and national differences.</h4>
 
-kaart komt hier:
+<!-- resize trick om te zorgen dat js pas laad als deze html geladen  -->
+<div class="card" style="display: flex; flex-direction: column; gap: 1rem;">
+  <div id="form-topic-slot"> 
+    ${resize((width) => formTopic)} 
+  </div>
+  <div>
+    <h3>Percentage of positive votes per country for this topic</h3>
+  </div>
+
+  <div style="display: flex; flex-direction: row; align-items: flex-start; gap: 1rem;">
+    <div id="container" style="position: relative; width: 500px; height: 300px;"></div>
+    <div>
+      ${legend}
+    </div>
+  </div>
+</div>
 
 <br>
 <h2>Bubble chart met alle landen: internet usage everyday</h2>
