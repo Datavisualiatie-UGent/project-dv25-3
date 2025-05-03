@@ -8,7 +8,7 @@ toc: false
 <script src="https://cdn.jsdelivr.net/npm/datamaps@0.5.9/dist/datamaps.world.min.js"></script>
 
 ```js
-const launches = FileAttachment("data/launches.csv").csv({typed: true});
+const bubble_data = (await FileAttachment("data/internet.csv").csv({typed: true}));
 ```
 
 ```js
@@ -226,49 +226,85 @@ function createMap(mapData) {
 createMap(mapData);
 ```
 
-<!-- A shared color scale for consistency, sorted by the number of launches -->
-
 ```js
-const color = Plot.scale({
-  color: {
-    type: "categorical",
-    domain: d3.groupSort(launches, (D) => -D.length, (d) => d.state).filter((d) => d !== "Other"),
-    unknown: "var(--theme-foreground-muted)"
-  }
-});
-```
+function bubble_chart(data, {width}) {
+  width = 878;
+  const height = width;
+  const margin = 1;
 
-```js
-function vehicleChart(data, {width}) {
-  return Plot.plot({
-    title: "Popular launch vehicles",
-    width,
-    height: 300,
-    marginTop: 0,
-    marginLeft: 50,
-    x: {grid: true, label: "Launches"},
-    y: {label: null},
-    color: {...color, legend: true},
-    marks: [
-      Plot.rectX(data, Plot.groupY({x: "count"}, {y: "family", fill: "state", tip: true, sort: {y: "-x"}})),
-      Plot.ruleX([0])
-    ]
-  });
+  const name = d => d.id;
+  const value = d => d.value;
+
+  const format = d3.format(",d");
+
+  const [minValue, maxValue] = d3.extent(data, value);
+  const color = d3.scaleSequential()
+  .domain([minValue, maxValue])
+  .interpolator(d3.interpolateViridis);
+
+  const pack = d3.pack()
+      .size([width - margin * 2, height - margin * 2])
+      .padding(3);
+
+  const root = pack(d3.hierarchy({children: data}).sum(d => Math.pow(d.value, 1.4)));
+
+  const svg = d3.create("svg")
+      .attr("width", width)
+      .attr("height", height)
+      .attr("viewBox", [-margin, -margin, width, height])
+      .attr("style", "max-width: 100%; height: auto; font: 16px sans-serif;")
+      .attr("text-anchor", "middle");
+
+  // Place each (leaf) node according to the layout’s x and y values.
+  const node = svg.append("g")
+    .selectAll()
+    .data(root.leaves())
+    .join("g")
+      .attr("transform", d => `translate(${d.x},${d.y})`);
+
+  // Add a title.
+  node.append("title")
+      .text(d => `${d.data.id}\n${format(d.value)}`);
+
+  // Add a filled circle.
+  node.append("circle")
+      .attr("fill-opacity", 0.75).attr("fill", d => color(d.data.value))
+      .attr("r", d => d.r);
+
+  // Add a label.
+  const text = node.append("text")
+      .style("font-size", "16px")
+      .attr("clip-path", d => `circle(${d.r})`);
+
+  text.append("tspan")
+    .attr("x", 0)
+    .attr("dy", "-0.3em")
+    .text(d => d.data.id);
+
+  // Add a tspan for the node’s value.
+  text.append("tspan")
+      .attr("x", 0)
+      .attr("dy", "1.2em")
+      .attr("fill-opacity", 0.7)
+      .text(d => `${format(d.data.value)}%`);
+
+  return Object.assign(svg.node(), {scales: {color}});
 }
+const bubble_legend = createLegend(71,97,paletteScale);
 ```
 <h1>Explore the survey</h1>
 <br><h2>Europe interactive map</h2>
 <br>
 <br>
-<h4>To make the insights more interactive and comparable, we've added a dedicated Explore section where you can dive into country-level responses across a range of key questions. Start by using the EU map with a dropdown menu to select the questions you're most interested in—then instantly see how each country responds. This map provides a powerful overview of geographical patterns and national differences. You can then click a country to go to a more detailed page.</h4>
+<h4>To make the insights more interactive and comparable, we've added a dedicated Explore section where you can dive into country-level responses across a range of key questions. Start by using the EU map with a dropdown menu to select the questions you're most interested in—then instantly see how each country responds. This map provides a powerful overview of geographical patterns and national differences. You can then click on a country to get a more detailed graph.</h4>
 
 <!-- resize trick om te zorgen dat js pas laad als deze html geladen  -->
 <div class="card" style="display: flex; flex-direction: column; gap: 1rem;">
   <div id="form-topic-slot"> 
     ${resize((width) => formTopic)} 
   </div>
-  <div>
-    <h3>Percentage of positive votes per country for this topic</h3>
+  <div class="chart-title">
+    Percentage of positive votes per country for this topic
   </div>
 
   <div style="display: flex; flex-direction: row; align-items: flex-start; gap: 1rem;">
@@ -280,17 +316,21 @@ function vehicleChart(data, {width}) {
 </div>
 
 <br>
-<h2>Bubble chart met alle landen: internet usage everyday?</h2>
+<h2>Everyday internet usage</h2>
 <br>
 <br>
-<h4>Curious about digital habits? Check out our bubble chart, where each country is represented by a circle sized by population and colored by the percentage of people who use the internet daily. It's a simple, visual way to grasp how digital engagement varies across Europe.</h4>
+<h4>Curious about digital habits? Check out our bubble chart, where each country is represented by a circle sized and colored by the percentage of people who use the internet daily. It's a simple, visual way to grasp how digital engagement varies across Europe.</h4>
 
-plot vervangen:
-
-<div class="grid grid-cols-1">
-  <div class="card">
-    ${resize((width) => vehicleChart(launches, {width}))}
+<div class="card">
+  <div class="chart-title">Share of Citizens Using the Internet Daily, by Country</div>
+  <div style="display: flex; align-items: center; gap: 0rem;">
+  <div style="flex: 1;">
+    ${resize((width) => bubble_chart(bubble_data, {width}))}
   </div>
+  <div style="flex: 0 0 auto;">
+    ${bubble_legend}
+  </div>
+</div>
 </div>
 
 <style>
@@ -301,5 +341,11 @@ h2 {
 h4 {
   display: inline;
   font-weight: normal;
+}
+
+.chart-title {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  font-size: 18px;
 }
 </style>
