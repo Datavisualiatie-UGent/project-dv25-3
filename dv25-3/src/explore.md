@@ -190,12 +190,12 @@ const legend = createLegend(min,max,paletteScale);
 
 ```js
 const sentimentOrder = [ //Volgorde waarin we de bars willen
-  "very negative",
-  "fairly negative",
-  "no effect",
-  "fairly positive",
-  "very positive",
-  "don't know"
+  "Very negative",
+  "Fairly negative",
+  "No effect",
+  "Fairly positive",
+  "Very positive",
+  "Don't know"
 ];
 const detailedPlotContainer = document.createElement("div");
 
@@ -212,12 +212,18 @@ function updateDetailedPlot(selectedCountry) {
       .filter(d => d.y !== undefined);
 
     detailedPlotContainer.innerHTML = "";
-    detailedPlotContainer.appendChild(html`<h3>${selectedCountry}</h3>`);
+    detailedPlotContainer.appendChild(html`<div class="chart-title">${selectedCountry}</div>`);
     detailedPlotContainer.appendChild(
     Plot.plot({
-      marks: [Plot.barY(entries, { x: "x", y: "y" })],
+      style: { fontSize: "13px" },
+      marks: [Plot.barY(entries, { x: "x", y: "y", fill: d => d.x })],
       x: { label: null, domain: sentimentOrder },
-      y: { label: "Count" }
+      y: { label: "Vote count" },
+      color: {
+          type: "categorical",
+          domain: sentimentOrder,
+          range: ["#440154","#3b528b","#21918c","#5ec962","#fde725", "#888888"]
+        }
     })
   );
   }
