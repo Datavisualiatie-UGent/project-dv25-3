@@ -3,6 +3,7 @@ title: Explore
 toc: false
 ---
 
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/datamaps@0.5.9/dist/datamaps.world.min.js"></script>
@@ -63,6 +64,7 @@ for (const [key, value] of Object.entries(countryCodeMapping)) {
 ```
 
 ```js
+//Laad de files
 const q6Attachments = {
   "Artificial Intelligence": FileAttachment("data/q6_Artificial Intelligence .csv").csv({typed: true}),
   "Biotechnology and genetic engineering": FileAttachment("data/q6_Biotechnology and genetic engineering.csv").csv({typed: true}),
@@ -75,7 +77,6 @@ const q6Attachments = {
   "Vaccines and combatting infectious diseases": FileAttachment("data/q6_Vaccines and combatting infectious diseases .csv").csv({typed: true})
 };
 
-// Display the header line of each CSV to prove it worked
 for (const [key, value] of Object.entries(q6Attachments)) {
   value.then((data) => {
     console.log(`${key}: Loaded OK`);
@@ -84,18 +85,22 @@ for (const [key, value] of Object.entries(q6Attachments)) {
   });
 }
 
+//Form om topic te selecten
 const formTopic = Inputs.select(Object.keys(q6Attachments), {unique: true, sort: true, label: "Topic:"});
 ```
 
 ```js
+//View zodat update
 const topic = view(formTopic);
 ```
 
 ```js
+//Wacht op de async
 const data = await q6Attachments[topic];
 ```
 
 ```js
+//Zet de data om naar procent positief voor de europa plot
 const mapData = {};
 let min = 100;
 let max = 0;
@@ -119,8 +124,9 @@ data.forEach(row => {
   }
 });
 
+//Kleurfunctie voor de kaart
 let paletteScale = d3.scaleSequential(d3.interpolateViridis)
-  .domain([min, max]);// Create a fills object dynamically based on the scale
+  .domain([min, max]);
 const fills = {
   defaultFill: "#D3D3D3"
 };
@@ -130,6 +136,7 @@ for (const key in mapData) {
 ```
 
 ```js
+//Helper functie om legende bij kaart te tekenen
 function createLegend(min, max, paletteScale) {
   const width = 50;
   const height = 300;
@@ -137,17 +144,15 @@ function createLegend(min, max, paletteScale) {
 
   const legendSvg = d3.create("svg")
     .attr("width", width)
-    .attr("height", height + 40); // extra for labels
+    .attr("height", height + 40); 
 
-  // Create gradient
   const gradientId = "legend-gradient";
   const defs = legendSvg.append("defs");
   const gradient = defs.append("linearGradient")
     .attr("id", gradientId)
-    .attr("x1", "0%").attr("y1", "100%") // vertical from bottom to top
+    .attr("x1", "0%").attr("y1", "100%")
     .attr("x2", "0%").attr("y2", "0%");
 
-  // Add color stops
   for (let i = 0; i <= steps; i++) {
     const t = i / steps;
     const value = min + (max - min) * t;
@@ -156,7 +161,6 @@ function createLegend(min, max, paletteScale) {
       .attr("stop-color", paletteScale(value));
   }
 
-  // Draw the gradient rect
   legendSvg.append("rect")
     .attr("x", 10)
     .attr("y", 10)
@@ -164,7 +168,6 @@ function createLegend(min, max, paletteScale) {
     .attr("height", height)
     .style("fill", `url(#${gradientId})`);
 
-  // Add min/max labels
   legendSvg.append("text")
     .attr("x", 5)
     .attr("y", height + 17)
@@ -179,16 +182,54 @@ function createLegend(min, max, paletteScale) {
     .attr("alignment-baseline", "middle")
     .text(`${max}%`);
 
-  return legendSvg.node(); // return the DOM element
+  return legendSvg.node();
 }
 
 const legend = createLegend(min,max,paletteScale);
 ```
 
+```js
+const sentimentOrder = [ //Volgorde waarin we de bars willen
+  "very negative",
+  "fairly negative",
+  "no effect",
+  "fairly positive",
+  "very positive",
+  "don't know"
+];
+const detailedPlotContainer = document.createElement("div");
+
+//Helper functie die bar chart toont als op een land klikt
+function updateDetailedPlot(selectedCountry) {
+  if (selectedCountry === undefined) {
+    return html`<div><\div>`
+  }
+  const filteredData = data.filter(row => row.country === selectedCountry);
+  if (filteredData.length > 0) {
+    const row = filteredData[0];
+    const entries = sentimentOrder
+      .map(k => ({ x: k, y: row[k] }))
+      .filter(d => d.y !== undefined);
+
+    detailedPlotContainer.innerHTML = "";
+    detailedPlotContainer.appendChild(html`<h3>${selectedCountry}</h3>`);
+    detailedPlotContainer.appendChild(
+    Plot.plot({
+      marks: [Plot.barY(entries, { x: "x", y: "y" })],
+      x: { label: null, domain: sentimentOrder },
+      y: { label: "Count" }
+    })
+  );
+  }
+}
+```
 
 ```js
+let selectedCountry = undefined;
+let countryTitle = "";
+
+//Map plotter functie, bind de map aan een container div
 function createMap(mapData) {
-  // Destroy the existing map if it exists
   const container = document.getElementById('container');
   container.innerHTML = '';
   var map = new Datamap({
@@ -197,8 +238,7 @@ function createMap(mapData) {
     data: mapData,
     setProjection: function(element) {
       var projection = d3.geoEquirectangular()
-        .center([20, 50])
-        .rotate([0, 0])
+        .center([20, 50]) //Al dit gepruts om op europa te zoomen, vermoeden dat gemaakt door amerikanen
         .scale(400)
         .translate([element.offsetWidth / 2, element.offsetHeight / 2]);
       var path = d3.geoPath()
@@ -215,9 +255,11 @@ function createMap(mapData) {
     },
     done: function(datamap) {
       datamap.svg.selectAll('.datamaps-subunit').on('click', function(geography) {
-        console.log("Clicked:", geography.id, geography.properties.name);
+        console.log("Clicked:", geography.id, geography.properties.name); //ONCLICK
         if (reversedMapping[geography.id]){
-          window.location.href = `/detail?country=${reversedMapping[geography.id]}`;
+          countryTitle = geography.properties.name;
+          selectedCountry = reversedMapping[geography.id];
+          updateDetailedPlot(selectedCountry);
         }
       });
     }
@@ -313,6 +355,7 @@ const bubble_legend = createLegend(71,97,paletteScale);
       ${legend}
     </div>
   </div>
+  ${resize((width) => detailedPlotContainer)}
 </div>
 
 <br>
