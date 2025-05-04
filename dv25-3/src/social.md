@@ -178,6 +178,7 @@ function slope_graph(gender, {width, height} = {}){
   </div>
   ${resize((width) => stacked_bar(percentage, {width}))}
 </div>
+
 <style>
 h1 {
     display: inline;
