@@ -4,6 +4,58 @@ toc: false
 ---
 
 ```js
+const percentage = await FileAttachment("data/qa11b.csv").csv({typed: true});
+const informDomain = [
+  "Free to the market",
+  "Regulated by government"
+];
+
+function stacked_bar(percentage, {width, height} = {}){
+  console.log(percentage);
+  const firstCategory = percentage.columns[1];
+  const sortedSubjects = [...percentage].sort((a, b) => d3.ascending(a[firstCategory], b[firstCategory])).map(d => d.name);
+  const tidy = percentage.columns.slice(1).flatMap(percent => percentage.map(d => ({subject: d.name, percent, percentage: d[percent]})));
+
+  return Plot.plot({
+    width: 928,
+    height: 600,
+    marginLeft: 400,
+    marginTop: 40,
+    marginBottom: 20,
+    style: {fontSize: "16px"},
+    y: {label: null, domain: sortedSubjects},
+    x: {axis: "top", tickFormat: d => `${d}%`, tickSize: 0},
+    color: {scheme: "Blues"},
+    marks: [
+      Plot.barX(tidy, {
+        y: "subject",
+        x: "percentage",
+        title: (iets, _) => iets.percentage.toFixed(2) + "%",
+        fill: "percent",
+        sort: {color: null}
+      }),
+      Plot.ruleX([50], {
+        stroke: "black",
+        strokeDasharray: "4,4",
+        strokeWidth: 1.5
+      }),
+      Plot.text([50], {
+        text: "50%",
+        x: sortedSubjects[0],
+        textAnchor: "middle",
+      }),
+      () =>
+          svg`<style>
+              g[aria-label=bar] rect {fill-opacity: 0.8; transition: fill-opacity .2s; cursor: pointer}
+              g[aria-label=bar]:hover rect:not(:hover) {fill-opacity: 0.3;}
+              g[aria-label=bar] rect:hover {fill-opacity: 1;}
+              `
+    ]
+  });
+}
+```
+
+```js
 const gender1 = await FileAttachment("data/gender1.csv").csv({ typed: true });
 const gender2 = await FileAttachment("data/gender2.csv").csv({ typed: true });
 const gender3 = await FileAttachment("data/gender3.csv").csv({ typed: true });
@@ -108,10 +160,24 @@ function slope_graph(gender, {width, height} = {}){
 <br><h2>Should technology be regulated?</h2>
 <br>
 <br>
-QA11b
-
-back-to-back bar chart
-
+<div class="card">
+  <div class="chart-title">Public Opinion on Technology Regulation</div>
+  <div class="mt-4">
+        ${Plot.legend({
+          color: {
+            type: "ordinal",
+            domain: informDomain,
+            scheme: "Blues" 
+          },
+          columns: 4,
+          style: {
+              fontSize: "14px",
+              spacing: "0.5rem"
+            }
+        })}
+  </div>
+  ${resize((width) => stacked_bar(percentage, {width}))}
+</div>
 <style>
 h1 {
     display: inline;
