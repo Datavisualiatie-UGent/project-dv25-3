@@ -218,7 +218,7 @@ function updateDetailedPlot(selectedCountry) {
       style: { fontSize: "13px" },
       marks: [Plot.barY(entries, { x: "x", y: "y", fill: d => d.x })],
       x: { label: null, domain: sentimentOrder },
-      y: { label: "Vote count" },
+      y: { label: "Total vote count" },
       color: {
           type: "categorical",
           domain: sentimentOrder,
@@ -352,7 +352,7 @@ function b2bBarChart(data, {width}) {
   })
 
   const w = width;
-  const height = 1500;
+  const height = 1000;
   //const graph = d3.select(DOM.svg(width, height));
   const graph = d3.select('body').append('svg').attr("width",w).attr("height",height);
 
@@ -376,7 +376,13 @@ function b2bBarChart(data, {width}) {
   const color_verybad='#e41a1c'
 
   const colors = [color_verygood,color_good,color_neutral,color_bad,color_verybad]
-  const colordefs=["heel positief","vrij positief","neutraal/geen mening","vrij negatief","heel negatief"]
+  const colordefs = [
+  "Very negative",
+  "Fairly negative",
+  "No effect/Don't know",
+  "Fairly positive",
+  "Very positive"
+].reverse();
 
   const countryCodeMapping = {
   BE: "Belgium",
@@ -541,12 +547,10 @@ function b2bBarChart(data, {width}) {
     </div>
   </div>
   ${resize((width) => detailedPlotContainer)}
-</div>
-
-<div class="grid grid-cols-1">
-  <div class="card">
-    ${resize((width) => b2bBarChart(data, {width}))}
+  <div class="chart-title">
+    Topic Overview
   </div>
+  ${resize((width) => b2bBarChart(data, {width}))}
 </div>
 
 <br>
