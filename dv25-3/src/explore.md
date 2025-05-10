@@ -144,7 +144,7 @@ function createLegend(min, max, paletteScale) {
 
   const legendSvg = d3.create("svg")
     .attr("width", width)
-    .attr("height", height + 40); 
+    .attr("height", height + 40);
 
   const gradientId = "legend-gradient";
   const defs = legendSvg.append("defs");
@@ -340,6 +340,185 @@ function bubble_chart(data, {width}) {
 }
 const bubble_legend = createLegend(71,97,paletteScale);
 ```
+
+```js
+function b2bBarChart(data, {width}) {
+
+  const fdata=data.filter(key=>!(key["country"] === "D-E" || key["country"] === "D-W"))
+
+  let parseddata= fdata.map(d => [parseInt(d['Don\'t know']),parseInt(d['Very positive']),parseInt(d['Fairly positive']),parseInt(d['No effect']),parseInt(d['Fairly negative']),parseInt(d['Very negative'])]).map(d => {
+  let sum = d.reduce((partialSum, a) => partialSum + a, 0);
+  return d.map(e => e/sum)
+  })
+
+  const w = width;
+  const height = 1500;
+  //const graph = d3.select(DOM.svg(width, height));
+  const graph = d3.select('body').append('svg').attr("width",w).attr("height",height);
+
+  const barHeight = 20;
+
+  const buffer = 5;
+
+  const header = 120;
+
+  const barWidth = 300;
+
+  const midpoint=450
+
+  const countrytext=150
+
+  //const color_dontknow='#A9A9A9'
+  const color_verygood='#228B22'
+  const color_good='#ADFF2F'
+  const color_neutral='#FFD700'
+  const color_bad='#FF8C00'
+  const color_verybad='#e41a1c'
+
+  const colors = [color_verygood,color_good,color_neutral,color_bad,color_verybad]
+  const colordefs=["heel positief","vrij positief","neutraal/geen mening","vrij negatief","heel negatief"]
+
+  const countryCodeMapping = {
+  BE: "Belgium",
+  BG: "Bulgaria",
+  CZ: "Czech Republic",
+  DK: "Denmark",
+  "D-W": "Germany (West)",
+  DE: "Germany",
+  "D-E": "Germany (East)",
+  EE: "Estonia",
+  IE: "Ireland",
+  EL: "Greece",
+  ES: "Spain",
+  FR: "France",
+  HR: "Croatia",
+  IT: "Italy",
+  CY: "Cyprus",
+  LV: "Latvia",
+  LT: "Lithuania",
+  LU: "Luxembourg",
+  HU: "Hungary",
+  MT: "Malta",
+  NL: "Netherlands",
+  AT: "Austria",
+  PL: "Poland",
+  PT: "Portugal",
+  RO: "Romania",
+  SI: "Slovenia",
+  SK: "Slovakia",
+  FI: "Finland",
+  SE: "Sweden",
+  TR: "Turkey",
+  MK: "North Macedonia",
+  ME: "Montenegro",
+  RS: "Serbia",
+  AL: "Albania",
+  UK: "United Kingdom",
+  BA: "Bosnia and Herzegovina",
+  XK: "Kosovo"
+};
+
+  graph.append("g")
+    .selectAll("rect")
+    .data(parseddata)
+    .enter().append("rect")
+      .attr("x",d=> midpoint-(d[3]+d[0])*barWidth/2)
+      .attr("y",(d,i) => i*(barHeight+buffer)+header)
+      .attr("width",d=> (d[3]+d[0])*barWidth)
+      .attr("height",barHeight)
+      .attr("fill",color_neutral);
+
+  graph.append("g")
+    .selectAll("rect")
+    .data(parseddata)
+    .enter().append("rect")
+      .attr("x",d=> midpoint-((d[3]+d[0])/2+d[2])*barWidth)
+      .attr("y",(d,i) => i*(barHeight+buffer)+header)
+      .attr("width",d=> d[2]*barWidth)
+      .attr("height",barHeight)
+      .attr("fill",color_good);
+
+  graph.append("g")
+    .selectAll("rect")
+    .data(parseddata)
+    .enter().append("rect")
+      .attr("x",d=> midpoint-((d[3]+d[0])/2+d[2]+d[1])*barWidth)
+      .attr("y",(d,i) => i*(barHeight+buffer)+header)
+      .attr("width",d=> d[1]*barWidth)
+      .attr("height",barHeight)
+      .attr("fill",color_verygood);
+
+  graph.append("g")
+    .selectAll("rect")
+    .data(parseddata)
+    .enter().append("rect")
+      .attr("x",d=> midpoint+((d[3]+d[0])/2)*barWidth)
+      .attr("y",(d,i) => i*(barHeight+buffer)+header)
+      .attr("width",d=> d[4]*barWidth)
+      .attr("height",barHeight)
+      .attr("fill",color_bad);
+
+  graph.append("g")
+    .selectAll("rect")
+    .data(parseddata)
+    .enter().append("rect")
+      .attr("x",d=> midpoint+((d[3]+d[0])/2+d[4])*barWidth)
+      .attr("y",(d,i) => i*(barHeight+buffer)+header)
+      .attr("width",d=> d[5]*barWidth)
+      .attr("height",barHeight)
+      .attr("fill",color_verybad);
+
+  graph.append("path")
+    .attr("fill", "none")
+    .attr("stroke", "black")
+    .attr("stroke-width", 1)
+    .style("stroke-dasharray", ("3, 3"))
+    .attr("d", d3.line()([[midpoint,120], [midpoint,120+parseddata.length*(barHeight+buffer)-buffer]]));
+
+  graph.append("g")
+    .selectAll("text")
+    .data(parseddata)
+    .enter()
+    .append("text")
+    .text((d,i) => countryCodeMapping[fdata[i]["country"]])
+    .style("text-anchor", "end")
+    //.style("font-size", "12px")
+    .attr("y",(d,i) => i*(barHeight+buffer)+buffer+barHeight*0.5+header)
+    .attr("x",(d,i) =>  countrytext);
+
+  graph.append("g")
+    .selectAll("path")
+    .data(parseddata)
+    .enter()
+    .append("path")
+    .attr("fill", "none")
+    .attr("stroke", "black")
+    .attr("stroke-width", 1)
+    .attr("d", (d,i)=>d3.line()([[countrytext,i*(barHeight+buffer)+barHeight*0.5+header], [midpoint-((d[3]+d[0])/2+d[2]+d[1])*barWidth,i*(barHeight+buffer)+barHeight*0.5+header]]));
+
+  graph.append("g")
+    .selectAll("rect")
+    .data(colors)
+    .enter()
+    .append("rect")
+    .attr("x",(d,i) => 10)
+    .attr("y",(d,i) => 10+i*20)
+    .attr("width",10)
+    .attr("height",10)
+    .attr("fill", d => d);
+
+  graph.append("g")
+    .selectAll("text")
+    .data(colors)
+    .enter()
+    .append("text")
+    .attr("x",(d,i) => 20)
+    .attr("y",(d,i) => 20+i*20)
+    .text((d,i) => colordefs[i]);
+
+  return graph.node();
+}
+```
 <h1>Explore the survey</h1>
 <br><h2>Europe interactive map</h2>
 <br>
@@ -348,8 +527,8 @@ const bubble_legend = createLegend(71,97,paletteScale);
 
 <!-- resize trick om te zorgen dat js pas laad als deze html geladen  -->
 <div class="card" style="display: flex; flex-direction: column; gap: 1rem;">
-  <div id="form-topic-slot"> 
-    ${resize((width) => formTopic)} 
+  <div id="form-topic-slot">
+    ${resize((width) => formTopic)}
   </div>
   <div class="chart-title">
     Percentage of positive votes per country for this topic
@@ -362,6 +541,12 @@ const bubble_legend = createLegend(71,97,paletteScale);
     </div>
   </div>
   ${resize((width) => detailedPlotContainer)}
+</div>
+
+<div class="grid grid-cols-1">
+  <div class="card">
+    ${resize((width) => b2bBarChart(data, {width}))}
+  </div>
 </div>
 
 <br>
