@@ -6,8 +6,8 @@ toc: false
 ```js
 const percentage = await FileAttachment("data/qa11b.csv").csv({typed: true});
 const informDomain = [
-  "Free to the market",
-  "Regulated by government"
+  "Regulated by government",
+  "Free to the market"
 ];
 
 function stacked_bar(percentage, {width, height} = {}){
@@ -125,7 +125,7 @@ function slope_graph(gender, {width, height} = {}){
 <h1>How does technology impact the social views and aspect of European society?</h1>
 <br>
 <br>
-<h4>In this section, we zoom in on public opinion around key societal issues—comparing results across regional blocs such as the <b>EU27</b>, the <b>Eurozone</b>, the <b>Balkans</b>, and <b>Non-Euro countries</b>.</h4>
+<h4>In this section, we zoom in on public opinion around key societal issues—comparing results across regional blocs such as the <b>EU27</b>, the <b>Eurozone</b>, the <b>Balkans Candidate</b> and <b>Non-Euro countries</b>.</h4>
 
 <br><h2>How do citizens view gender equality in relation to science, the economy, and fairness?</h2>
 <br>
@@ -159,7 +159,8 @@ function slope_graph(gender, {width, height} = {}){
 
 <br><h2>Should technology be regulated?</h2>
 <br>
-<br>
+<h4>Public opinion on how technology should be governed reveals a meaningful divide across different European regions. While innovation and market freedom are often celebrated as drivers of progress, there's a growing recognition of the need for regulation to ensure technology aligns with public interests, ethical standards, and social responsibility.</h4>
+
 <div class="card">
   <div class="chart-title">Public Opinion on Technology Regulation</div>
   <div class="mt-4">
@@ -178,6 +179,13 @@ function slope_graph(gender, {width, height} = {}){
   </div>
   ${resize((width) => stacked_bar(percentage, {width}))}
 </div>
+<h4>The stacked bar chart presents the share of citizens who believe technology should be regulated by government versus those who prefer it to remain free to the market. The data spans the four regional blocs.</h4>
+<ul>
+  <li><b>Regulation is generally favored</b> across all regions, with support highest in the Balkans Candidate Countries (59.2%) and the Eurozone (57.3%). This suggests a strong public desire for oversight in regions with deeper EU integration or aspirations.</li>
+  <li><b>Non-Euro countries</b> are the only group where a slight <b>majority prefers market freedom</b> (50.6%), possibly reflecting different economic priorities or political attitudes toward state intervention.</li>
+  <li>The <b>EU27 average</b> sits at 55.5% in favor of regulation, reflecting a cautious but consistent European consensus that technological progress should be guided by public institutions.</li>
+</ul>
+<h4>Overall, the data illustrates that <b>most Europeans lean toward government regulation of technology</b>, highlighting widespread concerns about privacy, misinformation, AI risks, or corporate power. However, regional variation also suggests that historical, political, and economic contexts continue to shape public attitudes.</h4>
 
 <style>
 h1 {
