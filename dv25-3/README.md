@@ -23,16 +23,14 @@ A typical Framework project looks like this:
 ```ini
 .
 ├─ src
-│  ├─ components
-│  │  └─ timeline.js           # an importable module
 │  ├─ data
-│  │  ├─ launches.csv.js       # a data loader
-│  │  └─ events.json           # a static data file
-│  ├─ explore.md     # a page
-│  ├─ social.md        # another page
-│  └─ index.md                 # the home page
+│  │  ├─ informed.csv
+│  │  └─ ...
+│  ├─ explore.md 
+│  ├─ social.md
+│  └─ index.md
 ├─ .gitignore
-├─ observablehq.config.js      # the app config file
+├─ observablehq.config.js
 ├─ package.json
 └─ README.md
 ```
