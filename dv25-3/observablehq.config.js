@@ -21,6 +21,7 @@ export default {
 
   // The path to the source root.
   root: "src",
+  base: "/project-dv25-3/",
 
   // Some additional configuration options and their defaults:
   theme: "light", // try "light", "dark", "slate", etc.
